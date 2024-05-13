@@ -1,4 +1,18 @@
-/**
- * This is a dto that will be returned by the server
- * contains more complete information than standard dto
- */
+package edu.lawrence.friendfinder.interfaces.dtos.out;
+
+// In-project includes
+import edu.lawrence.friendfinder.interfaces.dtos.ProfileDTO;
+
+public class ProfileODTO extends ProfileDTO {
+	
+	private Integer id;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
+}
