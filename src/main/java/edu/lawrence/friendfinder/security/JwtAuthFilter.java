@@ -48,7 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		}
 
 		if (userid != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			RestaurantUserDetails userDetails = new RestaurantUserDetails(userid);
+			AppUserDetails userDetails = new AppUserDetails(userid);
 			UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
 					userDetails, null, userDetails.getAuthorities());
 			authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
