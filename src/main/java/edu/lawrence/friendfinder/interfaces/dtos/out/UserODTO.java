@@ -1,10 +1,9 @@
 package edu.lawrence.friendfinder.interfaces.dtos.out;
 
-// In-project includes [DTOs]
-import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
-
 // Java-level includes [Utility]
 import java.util.UUID;
+
+import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
 
 public class UserODTO extends UserDTO{
 	

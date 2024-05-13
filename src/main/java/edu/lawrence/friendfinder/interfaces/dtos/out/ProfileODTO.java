@@ -1,6 +1,5 @@
 package edu.lawrence.friendfinder.interfaces.dtos.out;
 
-// In-project includes
 import edu.lawrence.friendfinder.interfaces.dtos.ProfileDTO;
 
 public class ProfileODTO extends ProfileDTO {
