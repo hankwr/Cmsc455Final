@@ -8,15 +8,18 @@
 		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>edu.lawrence</groupId>
 	<artifactId>Cmsc455Final</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Cmsc455Final</name>
 	<description>Backend for collaboration between CMSCs 106 and 455</description>
-	<properties>
-		<java.version>22</java.version>
-	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
