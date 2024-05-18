@@ -28,8 +28,9 @@ public class UserController {
 
     private JwtService jwtService;
     
-    public UserController(UserService us) {
+    public UserController(UserService us, JwtService jwtService) {
         this.us = us;
+        this.jwtService = jwtService;
     }
 
     @PostMapping
