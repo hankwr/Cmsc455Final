@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.lawrence.friendfinder.entities.User;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
 import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
 
@@ -33,6 +34,7 @@ public class UserController {
         this.jwtService = jwtService;
     }
 
+    // Register new user
     @PostMapping
     public ResponseEntity<UserDTO> save(@RequestBody UserDTO user) {
         if (user.getUsername().isBlank() || user.getPassword().isBlank()) {
@@ -47,5 +49,16 @@ public class UserController {
         String token = jwtService.makeJwt(key);
         user.setToken(token);
         return ResponseEntity.status(HttpStatus.CREATED).body(user);
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<UserDTO> checkLogin(@RequestBody UserDTO user) {
+        User result = us.findByNameAndPassword(user.getUsername(), user.getPassword());
+        if (result == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(user);
+        }
+        String token = jwtService.makeJwt(result.getId().toString());
+        user.setToken(token);
+        return ResponseEntity.ok().body(user);
     }
 }
