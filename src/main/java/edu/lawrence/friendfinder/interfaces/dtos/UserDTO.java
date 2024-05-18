@@ -3,10 +3,10 @@ package edu.lawrence.friendfinder.interfaces.dtos;
 public class UserDTO{
 	
 	private String username;
-	
 	private String password;
+	private String token;
 	
-	public UserDTO() {}
+	public UserDTO() {token = "";}
 
 	public String getUsername() {
 		return username;
@@ -23,5 +23,12 @@ public class UserDTO{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	public String getToken() {
+		return this.token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 }
