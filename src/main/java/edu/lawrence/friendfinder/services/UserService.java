@@ -8,9 +8,13 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.lawrence.friendfinder.entities.Profile;
 import edu.lawrence.friendfinder.entities.User;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
+import edu.lawrence.friendfinder.exceptions.UnauthorizedException;
+import edu.lawrence.friendfinder.interfaces.dtos.ProfileDTO;
 import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
+import edu.lawrence.friendfinder.repositories.ProfileRepository;
 import edu.lawrence.friendfinder.repositories.UserRepository;
 
 @Service
@@ -20,6 +24,9 @@ public class UserService {
 	
 	@Autowired
 	UserRepository userRepository;
+
+    @Autowired
+    ProfileRepository profileRepository;
 	
     // Register new user
 	public String save(UserDTO user) throws DuplicateException {
@@ -47,5 +54,27 @@ public class UserService {
         	u = null;
         }
         return u;
+	}
+	
+	public void saveProfile(UUID userid,ProfileDTO profile) throws UnauthorizedException, DuplicateException {
+		Optional<User> maybeUser = userRepository.findById(userid);
+		if(!maybeUser.isPresent())
+			throw new UnauthorizedException();
+		
+		User user = maybeUser.get();
+		if(user.getProfile() != null)
+			throw new DuplicateException();
+		
+		Profile newProfile = new Profile(profile);
+		newProfile.setUser(user);
+		profileRepository.save(newProfile);
+	}
+	
+	public Profile findProfile(UUID userid) {
+		Optional<User> maybeUser = userRepository.findById(userid);
+		if(!maybeUser.isPresent())
+			return null;
+		
+		return maybeUser.get().getProfile();
 	}
 }

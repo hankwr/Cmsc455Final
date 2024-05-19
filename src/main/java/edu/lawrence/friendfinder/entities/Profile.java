@@ -3,6 +3,8 @@ package edu.lawrence.friendfinder.entities;
 // Java-level includes [Utility]
 import java.util.List;
 
+import edu.lawrence.friendfinder.interfaces.dtos.ProfileDTO;
+
 // Jakarta-level includes [Class Annotations]
 import jakarta.persistence.Entity;
 
@@ -37,6 +39,13 @@ public class Profile{
 	private List<String> tags;
 	
 	public Profile() {}
+
+	public Profile(ProfileDTO core) {
+		fullname = core.getFullname();
+		emailaddress = core.getEmailaddress();
+		phonenumber = core.getPhonenumber();
+		bio = core.getBio();
+	}
 
 	public Integer getId() {
 		return id;

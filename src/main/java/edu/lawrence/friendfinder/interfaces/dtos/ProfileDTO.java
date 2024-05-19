@@ -3,8 +3,10 @@ package edu.lawrence.friendfinder.interfaces.dtos;
 // Java-level incldues [Utility]
 import java.util.List;
 
+import edu.lawrence.friendfinder.entities.Profile;
+
 public class ProfileDTO{
-	
+	private String user;
 	private String fullname;
 	private String emailaddress;
 	private int countrycode;
@@ -13,6 +15,22 @@ public class ProfileDTO{
 	private List<String> tags;
 	
 	public ProfileDTO() {}
+
+	public ProfileDTO(Profile core) {
+		user = core.getUser().getId().toString();
+		fullname = core.getFullname();
+		emailaddress = core.getEmailaddress();
+		phonenumber = core.getPhonenumber();
+		bio = core.getBio();
+	}
+	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
 
 	public String getFullname() {
 		return fullname;
