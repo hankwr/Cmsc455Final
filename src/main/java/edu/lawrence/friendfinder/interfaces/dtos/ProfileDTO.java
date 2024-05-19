@@ -6,15 +6,10 @@ import java.util.List;
 public class ProfileDTO{
 	
 	private String fullname;
-	
 	private String emailaddress;
-	
 	private int countrycode;
-	
 	private String phonenumber;
-	
 	private String bio;
-	
 	private List<String> tags;
 	
 	public ProfileDTO() {}
