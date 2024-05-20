@@ -1,6 +1,7 @@
 package edu.lawrence.friendfinder;
 
 // In-project includes [DTOs]
+import edu.lawrence.friendfinder.interfaces.dtos.ProfileDTO;
 import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
 
 // Hamcrest-level includes [Test Helpers]
@@ -9,7 +10,6 @@ import static org.hamcrest.Matchers.is;
 
 // Jupiter-level includes [Class Annotations]
 import org.junit.jupiter.api.TestMethodOrder;
-/** import org.junit.jupiter.api.Order; */
 
 // Jupiter-level includes [Function Annotations]
 import org.junit.jupiter.api.BeforeAll;
@@ -30,10 +30,11 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = Cmsc455FinalApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Order(1)
 public class UserRegistrationTests {
 	
 	private static UserDTO userA;
+	private static String tokenA;
+	private static ProfileDTO profileA;
 	
 	@BeforeAll
 	public static void setup() {
@@ -43,6 +44,13 @@ public class UserRegistrationTests {
 		userA = new UserDTO();
 		userA.setUsername("UserA");
 		userA.setPassword("password");
+
+		profileA = new ProfileDTO();
+		profileA.setFullname("Test User");
+		profileA.setEmailaddress("user@test.com");
+		profileA.setCountrycode(1);
+		profileA.setPhonenumber("4444444444");
+		profileA.setBio("I am a test user");
 	}
 	
 	@Test
@@ -88,6 +96,27 @@ public class UserRegistrationTests {
 		.statusCode(HttpStatus.BAD_REQUEST.value());
 	}
 	
-	// Add profile tests here
-	
+	@Test
+	@Order(2)
+	public void testLogin() {
+		tokenA = given()
+				.contentType("application/json")
+				.body(userA)
+				.when().post("/users/login")
+				.then()
+				.statusCode(200)
+				.extract().path("token");
+	}
+
+	@Test
+	@Order(3)
+	public void testPostProfile() {
+		given()
+		.header("Authorization","Bearer "+tokenA)
+		.contentType("application/json")
+		.body(profileA)
+		.when().post("/users/profile")
+		.then()
+		.statusCode(anyOf(is(201),is(409)));
+	}
 }
