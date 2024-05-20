@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -36,7 +37,8 @@ public class Profile{
 	
 	private String bio;
 	
-	private List<String> tags;
+	@OneToMany(mappedBy = "profile")
+	private List<Tag> tags;
 	
 	public Profile() {}
 
@@ -103,11 +105,11 @@ public class Profile{
 		this.bio = bio;
 	}
 
-	public List<String> getTags() {
+	public List<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<String> tags) {
+	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
 	
