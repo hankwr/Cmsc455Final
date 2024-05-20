@@ -62,17 +62,22 @@ public class UserRegistrationTests {
 		.when().post("/users")
 		.then()
 		.statusCode(anyOf(is(HttpStatus.CREATED.value()), is(HttpStatus.CONFLICT.value())));
+	}
 	
-		
-		// Failure states -----------------------------------------------------------------
-		
+	@Test
+	@Order(2)
+	public void testPostUserFailure_A() {
 		given() // Duplicate user
 		.contentType("application/json")
 		.body(userA)
 		.when().post("/users")
 		.then()
 		.statusCode(HttpStatus.CONFLICT.value());
-		
+	}
+	
+	@Test
+	@Order(3)
+	public void testPostUserFailure_B() {
 		given() // Missing password
 		.contentType("application/json")
 		.body(
@@ -83,7 +88,11 @@ public class UserRegistrationTests {
 		.when().post("/users")
 		.then()
 		.statusCode(HttpStatus.BAD_REQUEST.value());
-
+	}
+	
+	@Test
+	@Order(4)
+	public void testPostUserFailure_C() {
 		given() // Missing username
 		.contentType("application/json")
 		.body(
@@ -97,7 +106,7 @@ public class UserRegistrationTests {
 	}
 	
 	@Test
-	@Order(2)
+	@Order(5)
 	public void testLogin() {
 		tokenA = given()
 				.contentType("application/json")
@@ -109,7 +118,7 @@ public class UserRegistrationTests {
 	}
 
 	@Test
-	@Order(3)
+	@Order(6)
 	public void testPostProfile() {
 		given()
 		.header("Authorization","Bearer "+tokenA)
