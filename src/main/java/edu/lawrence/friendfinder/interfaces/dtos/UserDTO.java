@@ -6,7 +6,11 @@ public class UserDTO{
 	private String password;
 	private String token;
 	
-	public UserDTO() {token = "";}
+	public UserDTO() {
+		username = "";
+		password = "";
+		token = "";
+	}
 
 	public String getUsername() {
 		return username;
