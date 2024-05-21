@@ -61,9 +61,9 @@ public class UserService {
 	
 	public void saveProfile(UUID userid,ProfileDTO profile) throws UnauthorizedException, DuplicateException {
 		Optional<User> maybeUser = userRepository.findById(userid);
-		if(!maybeUser.isPresent())
+		/*if(!maybeUser.isPresent())
 			throw new UnauthorizedException();
-		
+		*/
 		User user = maybeUser.get();
 		if(user.getProfile() != null)
 			throw new DuplicateException();
