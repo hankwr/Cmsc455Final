@@ -66,7 +66,7 @@ public class UserRegistrationTests {
 	
 	@Test
 	@Order(2)
-	public void testPostUserFailure_A() {
+	public void testPostUserFailureDuplicate() {
 		given() // Duplicate user
 		.contentType("application/json")
 		.body(userA)
@@ -77,7 +77,7 @@ public class UserRegistrationTests {
 	
 	@Test
 	@Order(3)
-	public void testPostUserFailure_B() {
+	public void testPostUserFailureMissingPassword() {
 		given() // Missing password
 		.contentType("application/json")
 		.body(
@@ -92,7 +92,7 @@ public class UserRegistrationTests {
 	
 	@Test
 	@Order(4)
-	public void testPostUserFailure_C() {
+	public void testPostUserFailureMissingUsername() {
 		given() // Missing username
 		.contentType("application/json")
 		.body(
@@ -119,6 +119,74 @@ public class UserRegistrationTests {
 
 	@Test
 	@Order(6)
+	public void testLoginFailureBadPassword() {
+		given() // User exists in db but wrong password
+		.contentType("application/json")
+		.body(
+				"{\n"
+				+ "\"username\" : \"UserA\",\n"
+				+ "\"password\" : \"badpassword\"\n"
+				+ "}")
+		.when().post("/users/login")
+		.then()
+		.statusCode(HttpStatus.UNAUTHORIZED.value());
+	}
+	
+	@Test
+	@Order(7)
+	public void testLoginFailureNonUser() {
+		given() // User doesn't exist in db
+		.contentType("application/json")
+		.body(
+				"{\n"
+				+ "\"username\" : \"BadUser\",\n"
+				+ "\"password\" : \"badpassword\"\n"
+				+ "}")
+		.when().post("/users/login")
+		.then()
+		.statusCode(HttpStatus.UNAUTHORIZED.value());
+	}
+	
+	@Test
+	@Order(8)
+	public void testLoginFailureMissingFields() {
+		// Frontend should prevent these submissions altogether
+		given() // Username missing
+		.contentType("application/json")
+		.body(
+				"{\n"
+				+ "\"username\" : \"\",\n"
+				+ "\"password\" : \"badPassword\"\n"
+				+ "}")
+		.when().post("/users/login")
+		.then()
+		.statusCode(HttpStatus.UNAUTHORIZED.value());
+		
+		given() // Password missing
+		.contentType("application/json")
+		.body(
+				"{\n"
+				+ "\"username\" : \"badUsername\",\n"
+				+ "\"password\" : \"\"\n"
+				+ "}")
+		.when().post("users/login")
+		.then()
+		.statusCode(HttpStatus.UNAUTHORIZED.value());
+		
+		given() // All missing
+		.contentType("application/json")
+		.body(
+				"{\n"
+				+ "\"username\" : \"\",\n"
+				+ "\"password\" : \"\"\n"
+				+ "}")
+		.when().post("users/login")
+		.then()
+		.statusCode(HttpStatus.UNAUTHORIZED.value());
+	}
+	
+	@Test
+	@Order(9)
 	public void testPostProfile() {
 		given()
 		.header("Authorization","Bearer "+tokenA)
