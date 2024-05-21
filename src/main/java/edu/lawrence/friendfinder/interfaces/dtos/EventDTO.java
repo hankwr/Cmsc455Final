@@ -16,6 +16,8 @@ public class EventDTO {
 	private String name;
 	
 	private String description;
+
+	private String location;
 	
 	private Instant startTime;
 	
@@ -34,6 +36,7 @@ public class EventDTO {
 		userid = core.getHost().getId();
 		name = core.getName();
 		description = core.getDescription();
+		location = core.getLocation();
 		startTime = core.getStartTime();
 		endTime = core.getEndTime();
 		
@@ -63,6 +66,14 @@ public class EventDTO {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getLocation() {
+		return this.location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	public Instant getStartTime() {
