@@ -43,7 +43,7 @@ public class UserRegistrationTests {
 		
 		userA = new UserDTO();
 		userA.setUsername("UserA");
-//		userA.setPassword("password");
+		userA.setPassword("password");
 
 		profileA = new ProfileDTO();
 		profileA.setFullname("Test User");
