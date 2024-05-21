@@ -100,5 +100,13 @@ public class Event{
 	public void setEndTime(Instant endTime) {
 		this.endTime = endTime;
 	}
+
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	public void setRegistrations(List<Registration> registrations) {
+		this.registrations = registrations;
+	}
 	
 }
