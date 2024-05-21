@@ -38,7 +38,10 @@ public class Profile{
 	private String bio;
 	
 	@OneToMany(mappedBy = "profile")
-	private List<Tag> tags;
+	private List<GenreTag> genres;
+
+	@OneToMany(mappedBy = "profile")
+	private List<PlatformTag> platforms;
 	
 	public Profile() {}
 
@@ -105,12 +108,20 @@ public class Profile{
 		this.bio = bio;
 	}
 
-	public List<Tag> getTags() {
-		return tags;
+	public List<GenreTag> getGenres() {
+		return genres;
 	}
 
-	public void setTags(List<Tag> tags) {
-		this.tags = tags;
+	public void setGenres(List<GenreTag> genres) {
+		this.genres = genres;
+	}
+
+	public List<PlatformTag> getPlatforms() {
+		return platforms;
+	}
+
+	public void setPlatforms(List<PlatformTag> platforms) {
+		this.platforms = platforms;
 	}
 	
 }

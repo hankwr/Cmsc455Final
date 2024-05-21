@@ -1,9 +1,11 @@
 package edu.lawrence.friendfinder.interfaces.dtos;
 
-// Java-level incldues [Utility]
-import java.util.List;
-
+// In-project includes [Entities]
 import edu.lawrence.friendfinder.entities.Profile;
+
+// Java-level incldues [Utility]
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProfileDTO{
 	private String user;
@@ -12,7 +14,8 @@ public class ProfileDTO{
 	private int countrycode;
 	private String phonenumber;
 	private String bio;
-	private List<String> tags;
+	private List<String> genres;
+	private List<String> platforms;
 	
 	public ProfileDTO() {}
 
@@ -22,6 +25,12 @@ public class ProfileDTO{
 		emailaddress = core.getEmailaddress();
 		phonenumber = core.getPhonenumber();
 		bio = core.getBio();
+		
+		genres = new ArrayList<String>();
+		core.getGenres().forEach((g) -> genres.add(g.getName()));
+		
+		platforms = new ArrayList<String>();
+		core.getPlatforms().forEach((p) -> platforms.add(p.getName()));
 	}
 	
 	public String getUser() {
@@ -72,12 +81,20 @@ public class ProfileDTO{
 		this.bio = bio;
 	}
 
-	public List<String> getTags() {
-		return tags;
+	public List<String> getGenres() {
+		return genres;
 	}
 
-	public void setTags(List<String> tags) {
-		this.tags = tags;
+	public void setGenres(List<String> genres) {
+		this.genres = genres;
+	}
+	
+	public List<String> getPlatforms() {
+		return platforms;
+	}
+	
+	public void setPlatforms(List<String> platforms) {
+		this.platforms = platforms;
 	}
 	
 }
