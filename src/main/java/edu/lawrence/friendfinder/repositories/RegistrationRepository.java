@@ -11,9 +11,9 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RegistrationRepository extends JpaRepository<Registration, Integer>{
-
+	/*
 	List<Registration> findByEvent(Integer eventid);
 	
 	List<Registration> findByUser(UUID userid);
-	
+	*/
 }

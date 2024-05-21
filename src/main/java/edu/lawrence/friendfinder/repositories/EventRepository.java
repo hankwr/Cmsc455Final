@@ -11,9 +11,8 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EventRepository extends JpaRepository<Event, Integer>{
-
 	List<Event> findByName(String name);
-	
-	List<Event> findByUser(UUID userid);
-	
+
+	// Broken method b/c of diferences btw user & profile
+	//List<Event> findByProfile(UUID userid);
 }

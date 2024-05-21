@@ -28,7 +28,7 @@ public class User {
 	@OneToOne(mappedBy = "user")
 	private Profile profile;
 	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "host")
 	private List<Event> events;
 	
 	@OneToMany(mappedBy = "user")
