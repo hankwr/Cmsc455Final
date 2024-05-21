@@ -43,7 +43,7 @@ public class UserRegistrationTests {
 		
 		userA = new UserDTO();
 		userA.setUsername("UserA");
-		userA.setPassword("password");
+//		userA.setPassword("password");
 
 		profileA = new ProfileDTO();
 		profileA.setFullname("Test User");
@@ -195,5 +195,15 @@ public class UserRegistrationTests {
 		.when().post("/users/profile")
 		.then()
 		.statusCode(anyOf(is(201),is(409)));
+	}
+	
+	@Test
+	@Order(10)
+	public void testGetProfile() {
+		given()
+		.header("Authorization", "Bearer " + tokenA)
+		.when().get("/users/profile")
+		.then()
+		.statusCode(HttpStatus.OK.value());
 	}
 }
