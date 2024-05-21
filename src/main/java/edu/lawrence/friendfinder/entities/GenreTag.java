@@ -49,6 +49,4 @@ public class GenreTag {
 		this.name = name;
 	}
 	
-	
-	
 }
