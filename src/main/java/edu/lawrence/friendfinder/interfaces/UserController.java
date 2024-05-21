@@ -3,6 +3,7 @@ package edu.lawrence.friendfinder.interfaces;
 import edu.lawrence.friendfinder.services.JwtService;
 import edu.lawrence.friendfinder.services.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.lawrence.friendfinder.entities.Event;
 import edu.lawrence.friendfinder.entities.Profile;
 import edu.lawrence.friendfinder.entities.User;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
 import edu.lawrence.friendfinder.exceptions.UnauthorizedException;
+import edu.lawrence.friendfinder.interfaces.dtos.EventDTO;
 import edu.lawrence.friendfinder.interfaces.dtos.ProfileDTO;
 import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
 import edu.lawrence.friendfinder.security.AppUserDetails;
@@ -93,4 +96,16 @@ public class UserController {
     	ProfileDTO response = new ProfileDTO(result);
     	return ResponseEntity.ok().body(response);
     }
+    
+    @GetMapping("/events")
+	public ResponseEntity<List<EventDTO>> getEvents(Authentication authentication) {
+    	AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
+    	UUID id = UUID.fromString(details.getUsername());
+    	List<Event> events = us.findEvents(id);
+    	List<EventDTO> results = new ArrayList<EventDTO>();
+        for(Event e : events) {
+			results.add(new EventDTO(e));
+		}
+		return ResponseEntity.ok().body(results);
+	}
 }

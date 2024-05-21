@@ -1,6 +1,9 @@
 package edu.lawrence.friendfinder.services;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 // Spring-level includes [Class Annotations]
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,5 +39,13 @@ public class EventService{
         // When an event is first created, there should not be any registrants
         eventRepository.save(newE);
 		return newE.getId().toString();
+	}
+
+    public Event findById(Integer id) {
+		return eventRepository.findById(id).get();
+	}
+
+    public List<Event> findFuture() {
+		return eventRepository.findFuture(Instant.now());
 	}
 }

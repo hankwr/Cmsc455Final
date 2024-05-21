@@ -1,5 +1,6 @@
 package edu.lawrence.friendfinder.interfaces;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.lawrence.friendfinder.entities.Event;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
 import edu.lawrence.friendfinder.interfaces.dtos.EventDTO;
 import edu.lawrence.friendfinder.security.AppUserDetails;
@@ -43,4 +45,21 @@ public class EventController {
         } 
         return ResponseEntity.status(HttpStatus.CREATED).body(event);
     }
+
+    @GetMapping("/{id}")
+	public ResponseEntity<EventDTO> findById(@PathVariable Integer id) {
+		Event event = es.findById(id);
+		EventDTO result = new EventDTO(event);
+		return ResponseEntity.ok().body(result);
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<EventDTO>> findFutureEvents() {
+		List<Event> events = es.findFuture();
+		List<EventDTO> results = new ArrayList<EventDTO>();
+		for(Event e : events) {
+			results.add(new EventDTO(e));
+		}
+		return ResponseEntity.ok().body(results);
+	}
 }

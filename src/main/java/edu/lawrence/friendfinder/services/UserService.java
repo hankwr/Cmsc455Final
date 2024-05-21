@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.lawrence.friendfinder.entities.Event;
 import edu.lawrence.friendfinder.entities.Profile;
 import edu.lawrence.friendfinder.entities.User;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
@@ -79,5 +80,12 @@ public class UserService {
 			return null;
 		
 		return maybeUser.get().getProfile();
+	}
+	
+	public List<Event> findEvents(UUID userid) {
+		Optional<User> maybeUser = userRepository.findById(userid);
+		if(!maybeUser.isPresent())
+			return new ArrayList<Event>();
+		return maybeUser.get().getEvents();
 	}
 }
