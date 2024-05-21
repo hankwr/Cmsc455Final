@@ -9,11 +9,11 @@ public class ConvertTimeService {
 	
 	/**
 	 * time format examples: 
-	 * 12:04 pm, Tue 05/21/2024 CST
-	 * 11:59 am, Thu 05/16/2024 PST
+	 * 12:04 PM, Tue 05/21/2024 CST
+	 * 11:59 AM, Thu 05/16/2024 PST
 	 */
-	private static final String pattern = "hh:mm a, EEE MM:dd:yyyy z";
-	private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("UTC"));
+	private static final String pattern = "h:mm a, MM:dd:yyyy z";
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("UTC"));
 	
 	/**
 	 * Formats a java.time.Instant into a String, assumes UTC timezone
@@ -21,8 +21,15 @@ public class ConvertTimeService {
 	 * @return the formatted String version of the instant
 	 */
 	static public String InstantToString(Instant time) {
-		String ret = formatter.format(time);
-	
+		String ret;
+		
+		try {
+		ret = formatter.format(time);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return formatter.format(Instant.EPOCH);
+		}
+		
 		return ret;
 	}
 	
@@ -33,7 +40,14 @@ public class ConvertTimeService {
 	 * @return the formatted String version of the instant
 	 */
 	static public String InstantToString(Instant time, String zone) {
-		String ret = formatter.withZone(ZoneId.of(zone, ZoneId.SHORT_IDS)).format(time);
+		String ret;
+		
+		try{
+			ret = formatter.withZone(ZoneId.of(zone, ZoneId.SHORT_IDS)).format(time);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return formatter.format(Instant.EPOCH);
+		}
 		
 		return ret;
 	}
@@ -44,7 +58,14 @@ public class ConvertTimeService {
 	 * @return the parsed Instant object
 	 */
 	static public Instant StringToInstant(String time) {
-		Instant ret = Instant.from(formatter.parse(time));
+		Instant ret; 
+		
+		try{
+			ret = Instant.from(formatter.parse(time));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Instant.EPOCH;
+		}
 		
 		return ret;
 	}
@@ -56,7 +77,14 @@ public class ConvertTimeService {
 	 * @return the parsed Instant object
 	 */
 	static public Instant StringToInstant(String time, String zone) {
-		Instant ret = Instant.from(formatter.withZone(ZoneId.of(zone, ZoneId.SHORT_IDS)).parse(time));
+		Instant ret;
+		
+		try {
+			ret = Instant.from(formatter.withZone(ZoneId.of(zone, ZoneId.SHORT_IDS)).parse(time));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Instant.EPOCH;
+		}
 		
 		return ret;
 	}
