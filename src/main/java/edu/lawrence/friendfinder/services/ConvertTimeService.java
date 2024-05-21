@@ -18,12 +18,8 @@ public class ConvertTimeService {
 		return formatter.format(time);
 	}
 	
-	// Uncertain of how best to pass requested timezone
-	// May need helper method for parsing zoneId from string
-	static public Instant StringToInstant(String time /*, ZoneId timezone*/) {
-		Instant ret = Instant.from(formatter/*.withZone(timezone)*/.parse(time));
-				
-		return ret;
+	static public Instant StringToInstant(String time) {
+		return Instant.from(formatter.parse(time));
 	}
 	
 }
