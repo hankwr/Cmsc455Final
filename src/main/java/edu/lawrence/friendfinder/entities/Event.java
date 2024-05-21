@@ -8,10 +8,13 @@ import jakarta.persistence.Entity;
 
 // Jakarta-level includes [Field Annotations]
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+
+
+//Jakarta-level includes [Enums]
+import jakarta.persistence.GenerationType;
 
 @Entity
 public class Event{
