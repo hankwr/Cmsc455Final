@@ -1,6 +1,7 @@
 package edu.lawrence.friendfinder.entities;
 
 // Java-level includes [Utility]
+import java.util.List;
 import java.util.UUID;
 
 // Jakarta-level includes [Class Annotaions]
@@ -10,6 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
 @Entity
@@ -25,6 +27,12 @@ public class User {
 	
 	@OneToOne(mappedBy = "user")
 	private Profile profile;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Event> events;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Registration> registrations;
 	
 	public User() {}
 
@@ -59,4 +67,21 @@ public class User {
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
+
+	public List<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<Event> events) {
+		this.events = events;
+	}
+
+	public List<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	public void setRegistrations(List<Registration> registrations) {
+		this.registrations = registrations;
+	}
+	
 }
