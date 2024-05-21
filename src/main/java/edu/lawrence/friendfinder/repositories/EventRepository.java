@@ -16,6 +16,6 @@ public interface EventRepository extends JpaRepository<Event, Integer>{
 	List<Event> findByName(String name);
 	List<Event> findByHost(User host);
 
-	@Query("select e from Event a where startTime>=:i")
-	List<Event> findFuture(Instant i);
+	@Query("select e from Event e where startTime>=:now")
+	List<Event> findFuture(Instant now);
 }
