@@ -3,6 +3,9 @@ package edu.lawrence.friendfinder.entities;
 // Java-level includes [Time]
 import java.time.Instant;
 
+// Java-level includes [Utility]
+import java.util.List;
+
 // Jakarta-level includes [Class Annotations]
 import jakarta.persistence.Entity;
 
@@ -11,8 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-
-
+import jakarta.persistence.OneToMany;
 //Jakarta-level includes [Enums]
 import jakarta.persistence.GenerationType;
 
@@ -33,6 +35,9 @@ public class Event{
 	
 	private Instant startTime;
 	private Instant endTime;
+	
+	@OneToMany(mappedBy = "event")
+	private List<Registration> registrations;
 	
 	// Genre and Platform tags not set up for events yet
 //	private List<GenreTag> genres;
