@@ -44,6 +44,9 @@ public class UserService {
 
 	// Log-in
 	public User findByNameAndPassword(String name,String password) {
+		if(name.isBlank() || password.isBlank())
+			return null;
+		
 		List<User> existing = userRepository.findByUsername(name);
 		if(existing.size() != 1)
 			return null;
