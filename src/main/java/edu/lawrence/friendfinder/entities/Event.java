@@ -33,6 +33,7 @@ public class Event{
 	private String description;
 	private String location;
 	
+	private String timeZone;
 	private Instant startTime;
 	private Instant endTime;
 	
@@ -43,7 +44,15 @@ public class Event{
 //	private List<GenreTag> genres;
 //	private List<PlatformTag> platforms;
 	
-	public Event() {}
+	public Event() {
+		name = "";
+		description = "";
+		location = "";
+		
+		timeZone = "";
+		startTime = Instant.EPOCH;
+		endTime = Instant.EPOCH;
+	}
 
 	public Integer getId() {
 		return id;
@@ -83,6 +92,14 @@ public class Event{
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
 	}
 
 	public Instant getStartTime() {
