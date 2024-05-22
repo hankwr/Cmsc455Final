@@ -51,7 +51,6 @@ public class CTService {
 	 */
 	static public String instToStr(Instant time, String zone) {
 		
-		// EPOCH is always a valid Instant, no need for catch
 		String ret = strictFormat_Intern(Instant.EPOCH, zone);
 		
 		try{
@@ -106,7 +105,7 @@ public class CTService {
 	 * @param time the input String timestamp to check
 	 * @return 
 	 */
-	static public boolean checkFormat(String time) {
+	static public boolean validateFormattedInput(String time) {
 
 		boolean status = checkShape_Intern(time) && 
 				!Instant.EPOCH.equals(strictParse_Intern(time, null));
