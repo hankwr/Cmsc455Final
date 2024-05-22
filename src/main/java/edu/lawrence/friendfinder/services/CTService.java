@@ -1,11 +1,14 @@
 package edu.lawrence.friendfinder.services;
 
-// Java-level includes [Utility]
+// Java-level includes [Utility Exceptions]
 import java.util.regex.PatternSyntaxException;
+
+// Java-level includes [Time Exceptions]
+import java.time.format.DateTimeParseException;
+import java.time.DateTimeException;
 
 // Java-level includes [Time]
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -20,27 +23,22 @@ public class CTService {
 	 * 
 	 * leading zeros in front of hour will be removed automatically
 	 */
-	private static final String pattern = "h:mm a, M/dd/yyyy z";
 	private static final String regexPattern = "^\\d{1,2}:\\d{2} [A-Z]{2}, \\d{1,2}/\\d{2}/\\d{4} [A-Z]{1,3}$";
+	private static final String pattern = "h:mm a, M/dd/yyyy z";
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("UTC"));
-	private static final String formattedEpoch = formatter.format(Instant.EPOCH);
-	
-	
 	
 	/**
 	 * Formats a java.time.Instant into a String (h:mm a, M/dd/yyyy z), assumes UTC timezone
 	 * @param time the Instant object to convert
-	 * @return the formatted String version of the instant
+	 * @return the formatted String version of the instant, formatted UTC EPOCH on failure
 	 */
 	static public String instToStr(Instant time) {
-		String ret;
+		
+		String ret = strictFormat_Intern(Instant.EPOCH, null);
 		
 		try {
-		ret = formatter.format(time);
-		}catch (Exception e) {
-			e.printStackTrace();
-			return formattedEpoch;
-		}
+			ret = strictFormat_Intern(time, null);
+		}catch (DateTimeException e) {}
 		
 		return ret;
 	}
@@ -49,17 +47,16 @@ public class CTService {
 	 * Formats a java.time.Instant into a String of format (h:mm a, M/dd/yyyy z)
 	 * @param time time the Instant object to convert
 	 * @param zone the specified timezone to display in the String
-	 * @return the formatted String version of the instant
+	 * @return the formatted String version of the instant, formatted zone-adjusted EPOCH on failure
 	 */
 	static public String instToStr(Instant time, String zone) {
-		String ret;
+		
+		// EPOCH is always a valid Instant, no need for catch
+		String ret = strictFormat_Intern(Instant.EPOCH, zone);
 		
 		try{
-			ret = formatter.withZone(ZoneId.of(zone, ZoneId.SHORT_IDS)).format(time);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return formattedEpoch;
-		}
+			ret = strictFormat_Intern(time, zone);
+		} catch (DateTimeException e) {}
 		
 		return ret;
 	}
@@ -67,32 +64,19 @@ public class CTService {
 	/**
 	 * Parses a formatted String into a java.time.Instant, formats to UTC timezone
 	 * @param time the formatted String representation of time (h:mm a, M/dd/yyyy z)
-	 * @return the parsed Instant object, returns EPOCH date if failed
+	 * @return the parsed Instant object, UTC EPOCH on failure
 	 */
 	static public Instant strToInst(String time) {
-		Instant ret;
+
+		Instant ret = Instant.EPOCH;
 		
-		boolean status = false;
-		try { // My intellisense freaks out about unreachable code without this tryCatch block
-			status = time.matches(regexPattern);
-		} catch (PatternSyntaxException e){
-			e.printStackTrace();
-			ret = Instant.EPOCH;
-		}
-			
-		if(!status) // Checks to make sure formatting is of correct shape
-			ret = Instant.EPOCH;
+		if (!checkShape_Intern(time))
+			return ret;
 		
+		try {
+			ret = strictParse_Intern(time, null);
+		} catch (DateTimeParseException e) {}
 		
-		try { // Use tryCatch block to verify that Instant is valid (Feb 30th would be invalid, for example)
-			ret = Instant.from(formatter.withResolverStyle(ResolverStyle.STRICT).parse(time));
-		} catch (DateTimeParseException e) {
-			ret = Instant.EPOCH;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ret = Instant.EPOCH;
-		}
-			
 		return ret;
 	}
 	
@@ -100,32 +84,19 @@ public class CTService {
 	 * Parses a formatted String into a java.time.Instant, formats to specified timezone
 	 * @param time the formatted String representation of time (h:mm a, M/dd/yyyy z)
 	 * @param zone the specified zone abbreviation (UTC, CST, PST, etc.)
-	 * @return the parsed Instant object, returns EPOCH date if failed
+	 * @return the parsed Instant object, zone-adjusted EPOCH on failure
 	 */
 	static public Instant strToInst(String time, String zone) {
-		Instant ret;
 		
-		boolean status = false;
-		try { // My intellisense freaks out about unreachable code without this tryCatch block
-			status = time.matches(regexPattern);
-		} catch (PatternSyntaxException e){
-			e.printStackTrace();
-			ret = Instant.EPOCH;
-		}
-			
-		if(!status) // Checks to make sure formatting is of correct shape
-			ret = Instant.EPOCH;
+		Instant ret = Instant.from(Instant.EPOCH.atZone(zone_Intern(zone)));
 		
+		if (!checkShape_Intern(time))
+			return ret;
 		
-		try { // Use tryCatch block to verify that Instant is valid (Feb 30th would be invalid, for example)
-			ret = Instant.from(formatter.withResolverStyle(ResolverStyle.STRICT).withZone(ZoneId.of(zone, ZoneId.SHORT_IDS)).parse(time));
-		} catch (DateTimeParseException e) {
-			ret = Instant.EPOCH;
-		} catch (Exception e) {
-			e.printStackTrace();
-			ret = Instant.EPOCH;
-		}
-			
+		try {
+			ret = strictParse_Intern(time, zone);
+		} catch (DateTimeParseException e) {}
+		
 		return ret;
 	}
 
@@ -135,29 +106,92 @@ public class CTService {
 	 * @return 
 	 */
 	static public boolean checkFormat(String time) {
+
+		boolean status = checkShape_Intern(time) && 
+				!Instant.EPOCH.equals(strictParse_Intern(time, null));
+			
+		return status;
+	}
+	
+	/**
+	 * Checks if input string is of correct format, for internal use
+	 * @param time input formatted String time
+	 * @return
+	 */
+	static private boolean checkShape_Intern(String time) {
 		
-		boolean status;
+		boolean status = false;
 		
-		try { // Intellisense freaks out about unreachable code without this tryCatch block
+		try {
 			status = time.matches(regexPattern);
-		} catch (PatternSyntaxException e){
-			e.printStackTrace();
-			return false;
+		} catch (PatternSyntaxException e) {
+			e.printStackTrace(); // regexPattern is malformed
 		}
-			
-		if(!status) // Checks to make sure rough formatting is correct
-			return status;
 		
-		try { // Use tryCatch block to verify that Instant is valid (Feb 30th would be invalid, for example)
-			Instant.from(formatter.withResolverStyle(ResolverStyle.STRICT).parse(time));
-		} catch (DateTimeParseException e) {
-			return false;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+		return status;
+	}
+	
+	/**
+	 * Strictly parses an input String to Instant, for internal use
+	 * @param time formatted String time to be strictly parsed
+	 * @param zone 1-3 character String code for time zone, pass null for UTC
+	 * @return parsed Instant object, zone-adjusted EPOCH on failure
+	 */
+	static private Instant strictParse_Intern(String time, String zone) {
+		
+		DateTimeFormatter strictFormatter = formatter.withResolverStyle(ResolverStyle.STRICT);
+		
+		Instant ret = Instant.EPOCH;
+		
+		if (zone != null)
+		{
+			strictFormatter = strictFormatter.withZone(zone_Intern(zone));
+			ret = Instant.from(Instant.EPOCH.atZone(zone_Intern(zone)));
 		}
+
+		try {
+			ret = Instant.from(strictFormatter.parse(time));
+		} catch (DateTimeParseException e) {}
 			
-		return true;
+		return ret;
+	}
+	
+	/**
+	 * Strictly formats an input Instant to a String, for internal use
+	 * @param time the Instant to format to a string
+	 * @param zone the 1-3 character String code for the time zone, pass null for UTC
+	 * @return the formatted String, formatted zone-adjusted EPOCH on failure
+	 */
+	static private String strictFormat_Intern(Instant time, String zone) {
+		
+		DateTimeFormatter strictFormatter = formatter.withResolverStyle(ResolverStyle.STRICT);
+
+		if (zone != null)
+			strictFormatter = strictFormatter.withZone(zone_Intern(zone));
+		
+		String ret = strictFormatter.format(Instant.EPOCH);
+		
+		try {
+			ret = strictFormatter.format(time);
+		} catch (DateTimeException e) {}
+			
+		return ret;
+	}
+	
+	/**
+	 * Get's the ZoneId for a given 1-3 character time zone Code
+	 * @param zone the 1-3 character time zone code
+	 * @return the ZoneId object, UTC on failure
+	 */
+	static private ZoneId zone_Intern(String zone) {
+		ZoneId ret = ZoneId.of("UTC");
+		
+		try {
+			if (zone != null)
+				ret = ZoneId.of(zone, ZoneId.SHORT_IDS);
+		} catch (DateTimeException e) {}
+		
+		return ret;
 	}
 	
 }
