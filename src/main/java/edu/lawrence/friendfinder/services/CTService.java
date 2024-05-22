@@ -20,7 +20,7 @@ public class CTService {
 	 * 
 	 * leading zeros in front of hour will be removed automatically
 	 */
-	private static final String pattern = "h:mm a, M:dd:yyyy z";
+	private static final String pattern = "h:mm a, M/dd/yyyy z";
 	private static final String regexPattern = "^\\d{1,2}:\\d{2} [A-Z]{2}, \\d{1,2}/\\d{2}/\\d{4} [A-Z]{1,3}$";
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("UTC"));
 	private static final String formattedEpoch = formatter.format(Instant.EPOCH);
