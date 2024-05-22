@@ -27,7 +27,8 @@
 	numbering=true
 	autoSave=true
 	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc --># Gaming Friend Finder: Server Backend
+<!-- /vscode-markdown-toc -->
+# Gaming Friend Finder: Server Backend
 
 ##  1. <a name='ProjectDescription'></a>Project Description
 
