@@ -9,11 +9,13 @@ public class CTService {
 	
 	/**
 	 * time format examples: 
-	 * 12:04 PM, Tue 05/21/2024 CST
-	 * 11:59 AM, Thu 05/16/2024 PST
-	 * 8:45 PM, Mon 06/03/2024 UCT
+	 * 12:04 PM, 5/21/2024 CST
+	 * 11:59 AM, 5/16/2024 PST
+	 * 8:45 PM, 6/03/2024 UCT
+	 * 
+	 * leading zeros in front of hour will be removed automatically
 	 */
-	private static final String pattern = "h:mm a, MM:dd:yyyy z";
+	private static final String pattern = "h:mm a, M:dd:yyyy z";
 	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("UTC"));
 	
 	/**
