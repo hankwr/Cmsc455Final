@@ -152,50 +152,50 @@ Thus, the authentication is linked to them logging in, and they *must do so befo
 
     [baseurl]/users
 
-Request body should include a [UserDTO](#userdto)  with a unique username and password.
+Request body should include a [UserDTO](#UserDTO)  with a unique username and password.
 
 ##### User Log-in
 
     [baseurl]/users/login
 
-Request body should include a [UserDTO](#userdto)  with a unique username and password. The return body will send back the same object with the *assigned authentication token*. Thus, **the front-end should save this token for the user for authentication in future requests.**
+Request body should include a [UserDTO](#UserDTO)  with a unique username and password. The return body will send back the same object with the *assigned authentication token*. Thus, **the front-end should save this token for the user for authentication in future requests.**
 
 ##### Post a User Profile
 
     [baseurl]/users/profile
-Request body should include a [ProfileDTO](#profiledto). The profile is linked to the user submitting the request, and only one profile can exist per user, so if one already exists an exception will be thrown.
+Request body should include a [ProfileDTO](#ProfileDTO). The profile is linked to the user submitting the request, and only one profile can exist per user, so if one already exists an exception will be thrown.
 
 ##### Post an Event
 
     [baseurl]/events
 
-Request body should include an [EventDTO](#eventdto). The *userid* field corresponds to the host of the event, which is the person posting the event to the server.
+Request body should include an [EventDTO](#EventDTO). The *userid* field corresponds to the host of the event, which is the person posting the event to the server.
 
 ##### Post a Registration
 
     [baseurl]/registrations
-Request body should include a [RegistrationDTO](#registrationdto). The userid and eventid **must correspond** to objects that already exist in the database.
+Request body should include a [RegistrationDTO](#RegistrationDTO). The userid and eventid **must correspond** to objects that already exist in the database.
 
 ####  4.2.3. <a name='GETRequests'></a>GET Requests
 
 ##### Get User Profile
 
     [baseurl]/users/profile
-Returns the [ProfileDTO](#profiledto) corresponding to the requesting user.
+Returns the [ProfileDTO](#ProfileDTO) corresponding to the requesting user.
 
 ##### Get Events the User is Hosting
 
     [baseurl]/users/events
-Returns a *list* of [EventDTO](#eventdto) objects corresponding to all events in which the current user is assigned to be the host.
+Returns a *list* of [EventDTO](#EventDTO) objects corresponding to all events in which the current user is assigned to be the host.
 
 ##### Get All Future Events
 
     [baseurl]/events
-Returns a *list* of [EventDTO](#eventdto) objects corresponding to all events that have yet to begin.
+Returns a *list* of [EventDTO](#EventDTO) objects corresponding to all events that have yet to begin.
 ##### Get Specific Event
 
     [baseurl]/events/{id}
-The {id} field should be replaced with the id-value of the event being requesed. Returns an [EventDTO](#eventdto) object corresponding to that event.
+The {id} field should be replaced with the id-value of the event being requesed. Returns an [EventDTO](#EventDTO) object corresponding to that event.
 
 ##  5. <a name='BuiltWith'></a>Built With
 
