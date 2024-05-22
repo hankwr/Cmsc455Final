@@ -89,7 +89,7 @@ public class CTService {
 	static public Instant strToInst(String time, String zone) {
 		
 		Instant ret = Instant.from(
-				Instant.EPOCH.atZone(zone_Intern(zone)));
+				Instant.EPOCH.atZone(zoneOf_Intern(zone)));
 		
 		if (!checkShape_Intern(time))
 			return ret;
@@ -142,10 +142,10 @@ public class CTService {
 		
 		DateTimeFormatter strictFormatter = formatter
 				.withResolverStyle(ResolverStyle.STRICT)
-				.withZone(zone_Intern(zone));
+				.withZone(zoneOf_Intern(zone));
 		
 		Instant ret = Instant.from(
-				Instant.EPOCH.atZone(zone_Intern(zone)));
+				Instant.EPOCH.atZone(zoneOf_Intern(zone)));
 
 		try {
 			ret = Instant.from(strictFormatter.parse(time));
@@ -164,7 +164,7 @@ public class CTService {
 		
 		DateTimeFormatter strictFormatter = formatter
 				.withResolverStyle(ResolverStyle.STRICT)
-				.withZone(zone_Intern(zone));
+				.withZone(zoneOf_Intern(zone));
 
 		String ret = strictFormatter.format(Instant.EPOCH);
 		
@@ -180,13 +180,13 @@ public class CTService {
 	 * @param zone the 1-3 character time zone code, pass null for UTC
 	 * @return the ZoneId object, UTC on failure
 	 */
-	static private ZoneId zone_Intern(String zone) {
+	static private ZoneId zoneOf_Intern(String zone) {
 		ZoneId ret = ZoneId.of("UTC");
 		
-		try {
-			if (zone != null)
+		if (zone != null)
+			try {
 				ret = ZoneId.of(zone, ZoneId.SHORT_IDS);
-		} catch (DateTimeException e) {}
+			} catch (DateTimeException e) {}
 		
 		return ret;
 	}
