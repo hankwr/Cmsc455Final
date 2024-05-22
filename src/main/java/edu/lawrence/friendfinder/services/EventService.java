@@ -1,19 +1,22 @@
 package edu.lawrence.friendfinder.services;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 // Spring-level includes [Class Annotations]
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.lawrence.friendfinder.entities.Event;
-import edu.lawrence.friendfinder.entities.User;
+import edu.lawrence.friendfinder.entities.Registration;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
+import edu.lawrence.friendfinder.exceptions.InvalidException;
 import edu.lawrence.friendfinder.interfaces.dtos.EventDTO;
+import edu.lawrence.friendfinder.interfaces.dtos.RegistrationDTO;
 import edu.lawrence.friendfinder.repositories.EventRepository;
+import edu.lawrence.friendfinder.repositories.RegistrationRepository;
+import edu.lawrence.friendfinder.repositories.UserRepository;
 
 
 // Spring-level includes [Field Annotations]
@@ -22,6 +25,12 @@ import edu.lawrence.friendfinder.repositories.EventRepository;
 public class EventService{
 	@Autowired
 	EventRepository eventRepository;
+
+    @Autowired
+    RegistrationRepository registrationRepository;
+
+    @Autowired
+    UserRepository userRepository;
 	
     // Register new event
 	public String save(EventDTO e) throws DuplicateException {
@@ -48,4 +57,25 @@ public class EventService{
     public List<Event> findFuture() {
 		return eventRepository.findFuture(Instant.now());
 	}
+
+    public void saveRegistration(RegistrationDTO reg) throws DuplicateException, InvalidException {
+        // Check if event exists
+        Optional<Event> maybeEvent = eventRepository.findById(reg.getEventid());
+        if(maybeEvent.isPresent())
+			throw new InvalidException();
+        Event event = maybeEvent.get();
+
+        // Create Registration object
+        Registration newReg = new Registration();
+        newReg.setUser(userRepository.findById(reg.getUserid()).get());
+        newReg.setEvent(event);
+
+        // Check for duplicates in Registration table
+        Optional<Registration> maybeRegistration = registrationRepository.checkForDuplicates(newReg.getEvent().getId(), newReg.getUser().getId());
+		if(!maybeRegistration.isPresent())
+			throw new DuplicateException();
+
+        // Log Registration
+        registrationRepository.save(newReg);
+    }
 }

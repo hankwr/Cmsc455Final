@@ -5,12 +5,16 @@ import edu.lawrence.friendfinder.entities.Registration;
 
 // Java-level includes [Utility]
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 // Spring-level includes [Interfaces]
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface RegistrationRepository extends JpaRepository<Registration, Integer>{
+	@Query("select r from Registration r where event=:eventid and user=:userid")
+	Optional<Registration> checkForDuplicates(Integer eventid, UUID userid);
 	/*
 	List<Registration> findByEvent(Integer eventid);
 	
