@@ -199,10 +199,18 @@ The {id} field should be replaced with the id-value of the event being requesed.
 
 ##  5. <a name='BuiltWith'></a>Built With
 
-  - [Contributor Covenant](https://www.contributor-covenant.org/) - Used
-    for the Code of Conduct
   - [Creative Commons](https://creativecommons.org/) - Used to choose
     the license
+  - [MySQL](https://www.mysql.com/) - Used to create and manage
+    the database
+  - [Spring Security](https://spring.io/projects/spring-security) - Used for user
+    authentication
+  - [Spring Data](https://spring.io/projects/spring-data) - Used for data repository
+    creation
+  - [Hibernate](https://hibernate.org/) - Used for interacting with
+    the database
+  - [Spring Boot](https://spring.io/projects/spring-boot) - Used for construction of
+    server application and REST controllers
 
 ##  6. <a name='Versioning'></a>Versioning
 
