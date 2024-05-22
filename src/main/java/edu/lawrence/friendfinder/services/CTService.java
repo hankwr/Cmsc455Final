@@ -25,7 +25,7 @@ public class CTService {
 	 */
 	private static final String regexPattern = "^\\d{1,2}:\\d{2} [A-Z]{2}, \\d{1,2}/\\d{2}/\\d{4} [A-Z]{1,3}$";
 	private static final String pattern = "h:mm a, M/dd/yyyy z";
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("UTC"));
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 	
 	/**
 	 * Formats a java.time.Instant into a String (h:mm a, M/dd/yyyy z), assumes UTC timezone
@@ -88,7 +88,8 @@ public class CTService {
 	 */
 	static public Instant strToInst(String time, String zone) {
 		
-		Instant ret = Instant.from(Instant.EPOCH.atZone(zone_Intern(zone)));
+		Instant ret = Instant.from(
+				Instant.EPOCH.atZone(zone_Intern(zone)));
 		
 		if (!checkShape_Intern(time))
 			return ret;
@@ -139,15 +140,12 @@ public class CTService {
 	 */
 	static private Instant strictParse_Intern(String time, String zone) {
 		
-		DateTimeFormatter strictFormatter = formatter.withResolverStyle(ResolverStyle.STRICT);
+		DateTimeFormatter strictFormatter = formatter
+				.withResolverStyle(ResolverStyle.STRICT)
+				.withZone(zone_Intern(zone));
 		
-		Instant ret = Instant.EPOCH;
-		
-		if (zone != null)
-		{
-			strictFormatter = strictFormatter.withZone(zone_Intern(zone));
-			ret = Instant.from(Instant.EPOCH.atZone(zone_Intern(zone)));
-		}
+		Instant ret = Instant.from(
+				Instant.EPOCH.atZone(zone_Intern(zone)));
 
 		try {
 			ret = Instant.from(strictFormatter.parse(time));
@@ -164,11 +162,10 @@ public class CTService {
 	 */
 	static private String strictFormat_Intern(Instant time, String zone) {
 		
-		DateTimeFormatter strictFormatter = formatter.withResolverStyle(ResolverStyle.STRICT);
+		DateTimeFormatter strictFormatter = formatter
+				.withResolverStyle(ResolverStyle.STRICT)
+				.withZone(zone_Intern(zone));
 
-		if (zone != null)
-			strictFormatter = strictFormatter.withZone(zone_Intern(zone));
-		
 		String ret = strictFormatter.format(Instant.EPOCH);
 		
 		try {
@@ -179,8 +176,8 @@ public class CTService {
 	}
 	
 	/**
-	 * Get's the ZoneId for a given 1-3 character time zone Code
-	 * @param zone the 1-3 character time zone code
+	 * Get's the ZoneId for a given 1-3 character time zone Code, for internal use
+	 * @param zone the 1-3 character time zone code, pass null for UTC
 	 * @return the ZoneId object, UTC on failure
 	 */
 	static private ZoneId zone_Intern(String zone) {
