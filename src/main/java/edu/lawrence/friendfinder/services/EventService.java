@@ -43,8 +43,9 @@ public class EventService{
 		newE.setName(e.getName());
         newE.setDescription(e.getDescription());
         newE.setLocation(e.getLocation());
-        newE.setStartTime(e.getStartTime());
-        newE.setEndTime(e.getEndTime());
+        newE.setTimeZone(e.getTimeZone());
+        newE.setStartTime(CTService.strToInst(e.getStartTime(), newE.getTimeZone()));
+        newE.setEndTime(CTService.strToInst(e.getEndTime(), newE.getTimeZone()));
         // When an event is first created, there should not be any registrants
         eventRepository.save(newE);
 		return newE.getId().toString();

@@ -3,6 +3,9 @@ package edu.lawrence.friendfinder.interfaces.dtos;
 // In-project includes [Entities]
 import edu.lawrence.friendfinder.entities.Event;
 
+// In-project includes [Services]
+import edu.lawrence.friendfinder.services.CTService;
+
 // Java-level includes [Utility]
 import java.util.UUID;
 
@@ -19,26 +22,34 @@ public class EventDTO {
 
 	private String location;
 	
-	private Instant startTime;
+	private String timeZone;
 	
-	private Instant endTime;
+	private String startTime;
+	
+	private String endTime;
 	
 	private Integer numRegistered;
 	
 	public EventDTO() {
 		name = "";
 		description = "";
+		location = "";
+		timeZone = "UTC";
+		
+		startTime = "12:00 AM, 01/01/1970 UTC"; // Instant.EPOCH as raw formatted string
+		endTime = "12:00 AM, 01/01/1970 UTC";
+		
+		numRegistered = 0;
 	}
 	
 	public EventDTO(Event core) {
-		this();
-		
 		userid = core.getHost().getId();
 		name = core.getName();
 		description = core.getDescription();
 		location = core.getLocation();
-		startTime = core.getStartTime();
-		endTime = core.getEndTime();
+		timeZone = core.getTimeZone().isBlank() ? "UTC" : core.getTimeZone();
+		startTime = CTService.instToStr(core.getStartTime(), timeZone);
+		endTime = CTService.instToStr(core.getEndTime(), timeZone);
 		
 		numRegistered = 0;
 		core.getRegistrations().forEach((r) -> numRegistered++);
@@ -75,23 +86,39 @@ public class EventDTO {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	
+	public String getTimeZone() {
+		return timeZone;
+	}
 
-	public Instant getStartTime() {
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
+	}
+
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Instant startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public Instant getEndTime() {
+	public void setStartTime(Instant startTime) {
+		this.startTime = CTService.instToStr(startTime, timeZone);
+	}
+	
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Instant endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 
+	public void setEndTime(Instant endTime) {
+		this.startTime = CTService.instToStr(endTime, timeZone);
+	}
+	
 	public Integer getNumRegistered() {
 		return numRegistered;
 	}
