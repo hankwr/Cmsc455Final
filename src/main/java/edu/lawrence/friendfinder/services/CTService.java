@@ -1,9 +1,9 @@
 package edu.lawrence.friendfinder.services;
 
 // Java-level includes [Time]
+import java.time.format.DateTimeFormatter;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 public class CTService {
 	
