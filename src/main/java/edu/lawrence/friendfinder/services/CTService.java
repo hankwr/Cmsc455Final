@@ -21,7 +21,7 @@ public class CTService {
 	 * @param time the Instant object to convert
 	 * @return the formatted String version of the instant
 	 */
-	static public String instantToString(Instant time) {
+	static public String instToStr(Instant time) {
 		String ret;
 		
 		try {
