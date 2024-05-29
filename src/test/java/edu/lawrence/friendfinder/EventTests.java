@@ -89,4 +89,14 @@ public class EventTests {
 		.then()
 		.statusCode(anyOf(is(HttpStatus.CREATED.value()), is(HttpStatus.CONFLICT.value())));
 	}
+
+	@Test
+	@Order(4)
+	public void testGetUserEvents() {
+		given()
+		.header("Authorization", "Bearer " + tokenA)
+		.when().get("/users/events")
+		.then()
+		.statusCode(HttpStatus.OK.value());
+	}
 }
