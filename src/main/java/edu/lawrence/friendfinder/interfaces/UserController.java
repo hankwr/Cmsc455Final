@@ -110,6 +110,10 @@ public class UserController {
 		return ResponseEntity.ok().body(results);
 	}
     
+    // Could also convert this to request body mapping since this might
+    // 		clutter the searchbar
+    // http://.../$platform=tag1&platform=tag2&genre=tag3&genre=tag4&excl=false
+    // http://.../$excl=false
     @GetMapping(value = "/profile", params = {"platform", "genre", "excl"})
     public ResponseEntity<List<ProfileDTO>> getProfileWithTags(Authentication authentication, 
     		@RequestParam(value = "platform", required = false) List<String> platformTags,
