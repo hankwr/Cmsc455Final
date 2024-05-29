@@ -30,7 +30,7 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = Cmsc455FinalApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UserRegistrationTests {
+public class APIUserTests {
 	
 	private static UserDTO userA;
 	private static String tokenA;
