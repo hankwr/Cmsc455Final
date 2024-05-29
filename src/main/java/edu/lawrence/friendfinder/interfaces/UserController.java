@@ -110,10 +110,11 @@ public class UserController {
 		return ResponseEntity.ok().body(results);
 	}
     
-    @GetMapping(value = "/profile", params = {"platform", "genre"})
+    @GetMapping(value = "/profile", params = {"platform", "genre", "excl"})
     public ResponseEntity<List<ProfileDTO>> getProfileWithTags(Authentication authentication, 
     		@RequestParam(value = "platform", required = false) List<String> platformTags,
-    		@RequestParam(value = "genre", required = false) List<String> genreTags)
+    		@RequestParam(value = "genre", required = false) List<String> genreTags,
+    		@RequestParam(value = "excl") boolean exclude)
     {
     	AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
     	
@@ -125,7 +126,10 @@ public class UserController {
     	if (checkUser == null)
     		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(results);
     	
-    	results = us.getProfilesByTags(platformTags, genreTags);
+    	if (exclude)
+    		results = us.getProfilesByTagsEx(platformTags, genreTags);
+    	else
+    		results = us.getProfilesByTags(platformTags, genreTags);
     	
     	return ResponseEntity.ok().body(results);
     }
