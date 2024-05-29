@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.lawrence.friendfinder.entities.Event;
@@ -108,4 +109,24 @@ public class UserController {
 		}
 		return ResponseEntity.ok().body(results);
 	}
+    
+    @GetMapping(value = "/profile", params = {"platform", "genre"})
+    public ResponseEntity<List<ProfileDTO>> getProfileWithTags(Authentication authentication, 
+    		@RequestParam(value = "platform", required = false) List<String> platformTags,
+    		@RequestParam(value = "genre", required = false) List<String> genreTags)
+    {
+    	AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
+    	
+    	List<ProfileDTO> results = new ArrayList<ProfileDTO>();
+    	
+    	// Prevented non-users from accessing other user profiles
+    	UUID id = UUID.fromString(details.getUsername());
+    	Profile checkUser = us.findProfile(id);
+    	if (checkUser == null)
+    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(results);
+    	
+    	results = us.getProfilesByTags(platformTags, genreTags);
+    	
+    	return ResponseEntity.ok().body(results);
+    }
 }
