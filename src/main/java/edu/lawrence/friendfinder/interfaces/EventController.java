@@ -27,7 +27,9 @@ import edu.lawrence.friendfinder.services.EventService;
 public class EventController {
 	private EventService es;
 
-    public EventController() {}
+    public EventController(EventService es) {
+		this.es = es;
+	}
 
     // Register new user
     @PostMapping
