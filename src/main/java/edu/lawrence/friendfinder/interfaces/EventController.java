@@ -20,7 +20,6 @@ import edu.lawrence.friendfinder.exceptions.DuplicateException;
 import edu.lawrence.friendfinder.exceptions.InvalidException;
 import edu.lawrence.friendfinder.interfaces.dtos.EventDTO;
 import edu.lawrence.friendfinder.interfaces.dtos.RegistrationDTO;
-import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
 import edu.lawrence.friendfinder.security.AppUserDetails;
 import edu.lawrence.friendfinder.services.EventService;
 

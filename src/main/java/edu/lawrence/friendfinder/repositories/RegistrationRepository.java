@@ -4,7 +4,6 @@ package edu.lawrence.friendfinder.repositories;
 import edu.lawrence.friendfinder.entities.Registration;
 
 // Java-level includes [Utility]
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
