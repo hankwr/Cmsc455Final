@@ -14,6 +14,8 @@ import java.time.Instant;
 
 public class EventDTO {
 	
+	private Integer eventId;
+	
 	private UUID userid;
 	
 	private String name;
@@ -31,18 +33,20 @@ public class EventDTO {
 	private Integer numRegistered;
 	
 	public EventDTO() {
+		eventId = 0;
 		name = "";
 		description = "";
 		location = "";
 		timeZone = "UTC";
 		
-		startTime = "12:00 AM, 01/01/1970 UTC"; // Instant.EPOCH as raw formatted string
-		endTime = "12:00 AM, 01/01/1970 UTC";
+		startTime = "12:00 AM, 1/01/1970 UTC"; // Instant.EPOCH as raw formatted string
+		endTime = "12:00 AM, 1/01/1970 UTC";
 		
 		numRegistered = 0;
 	}
 	
 	public EventDTO(Event core) {
+		eventId = core.getId();
 		userid = core.getHost().getId();
 		name = core.getName();
 		description = core.getDescription();
@@ -51,8 +55,15 @@ public class EventDTO {
 		startTime = CTService.instToStr(core.getStartTime(), timeZone);
 		endTime = CTService.instToStr(core.getEndTime(), timeZone);
 		
-		numRegistered = 0;
-		core.getRegistrations().forEach((r) -> numRegistered++);
+		numRegistered = core.getRegistrations().size();
+	}
+
+	public Integer getEventId() {
+		return eventId;
+	}
+
+	public void setEventId(Integer eventId) {
+		this.eventId = eventId;
 	}
 
 	public UUID getUserid() {
