@@ -102,11 +102,22 @@ public class EventTests {
 	public void testGetEvents() {
 		eventId =  given()
 				.header("Authorization", "Bearer " + tokenA)
-				.when().get("/events")
+				.when().get("/users/events")
 				.then()
 				.statusCode(200)
-				.extract().path("[0].name");
+				.extract().path("[0].eventId").toString();
+	}
+	
+	@Test
+	@Order(5)
+	public void testRegistration() {
+		given().
+		header("Authorization", "Bearer " + tokenA).
+		when().post("/events/" + eventId).
+		then().
+		statusCode(anyOf(is(HttpStatus.OK.value()), 
+				is(HttpStatus.BAD_REQUEST.value()), 
+				is(HttpStatus.CONFLICT.value())));
 		
-		System.out.println(eventId);
 	}
 }

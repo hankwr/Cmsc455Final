@@ -79,7 +79,7 @@ public class EventController {
 	
 	@PostMapping("/{id}")
 	public ResponseEntity<RegistrationDTO> register(Authentication authentication,
-			@RequestBody RegistrationDTO registration, @PathVariable("id") Integer id) {
+			@PathVariable("id") Integer id) {
 
 		AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
 		UUID userId = UUID.fromString(details.getUsername());
@@ -89,7 +89,7 @@ public class EventController {
 		ret.setUserid(userId);
 
 		try {
-			es.saveRegistration(registration);
+			es.saveRegistration(ret);
 		} catch (DuplicateException e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).body(ret);
 		} catch (InvalidException e) {
