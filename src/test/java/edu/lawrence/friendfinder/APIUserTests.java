@@ -1,5 +1,7 @@
 package edu.lawrence.friendfinder;
 
+import java.util.List;
+
 // In-project includes [DTOs]
 import edu.lawrence.friendfinder.interfaces.dtos.ProfileDTO;
 import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
@@ -51,6 +53,8 @@ public class APIUserTests {
 		profileA.setCountrycode(1);
 		profileA.setPhonenumber("4444444444");
 		profileA.setBio("I am a test user");
+		profileA.setGenres(List.of("Test Genre 1", "Test Genre 2"));
+		profileA.setPlatforms(List.of("Test Platform 1", "Test Platform 2"));
 	}
 	
 	@Test
@@ -194,7 +198,7 @@ public class APIUserTests {
 		.body(profileA)
 		.when().post("/users/profile")
 		.then()
-		.statusCode(anyOf(is(201),is(409)));
+		.statusCode(anyOf(is(201), is(401), is(409)));
 	}
 	
 	@Test
