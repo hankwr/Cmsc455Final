@@ -9,7 +9,6 @@ import java.time.DateTimeException;
 
 // Java-level includes [Time]
 import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
 import java.time.Instant;
 import java.time.ZoneId;
 
@@ -24,8 +23,8 @@ public class CTService {
 	 * leading zeros in front of hour will be removed automatically
 	 */
 	private static final String regexPattern = "^\\d{1,2}:\\d{2} [A-Z]{2}, \\d{1,2}/\\d{2}/\\d{4} [A-Z]{1,3}$";
-	private static final String pattern = "h:mm a, M/dd/yyyy z";
-	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+	private static final String pattern = "hh:mm a, MM/dd/yyyy z";
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("UTC"));
 	
 	/**
 	 * Formats a java.time.Instant into a String (h:mm a, M/dd/yyyy z), assumes UTC timezone
@@ -140,7 +139,7 @@ public class CTService {
 	static private Instant strictParse_Intern(String time, String zone) {
 		
 		DateTimeFormatter strictFormatter = formatter
-				.withResolverStyle(ResolverStyle.STRICT)
+				//.withResolverStyle(ResolverStyle.STRICT)
 				.withZone(zoneOf_Intern(zone));
 		
 		Instant ret = Instant.from(
@@ -148,7 +147,11 @@ public class CTService {
 
 		try {
 			ret = Instant.from(strictFormatter.parse(time));
-		} catch (DateTimeParseException e) {}
+		} catch (DateTimeParseException e) {
+			e.printStackTrace();
+		} catch (DateTimeException e) {
+			e.printStackTrace();
+		}
 			
 		return ret;
 	}
@@ -162,7 +165,7 @@ public class CTService {
 	static private String strictFormat_Intern(Instant time, String zone) {
 		
 		DateTimeFormatter strictFormatter = formatter
-				.withResolverStyle(ResolverStyle.STRICT)
+				//.withResolverStyle(ResolverStyle.STRICT)
 				.withZone(zoneOf_Intern(zone));
 
 		String ret = strictFormatter.format(Instant.EPOCH);
