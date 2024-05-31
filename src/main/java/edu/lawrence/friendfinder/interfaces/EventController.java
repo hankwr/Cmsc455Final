@@ -19,6 +19,8 @@ import edu.lawrence.friendfinder.entities.Event;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
 import edu.lawrence.friendfinder.exceptions.InvalidException;
 import edu.lawrence.friendfinder.interfaces.dtos.EventDTO;
+import edu.lawrence.friendfinder.interfaces.dtos.RegistrationDTO;
+import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
 import edu.lawrence.friendfinder.security.AppUserDetails;
 import edu.lawrence.friendfinder.services.EventService;
 
@@ -66,5 +68,42 @@ public class EventController {
 			results.add(new EventDTO(e));
 		}
 		return ResponseEntity.ok().body(results);
+	}
+	
+	@PostMapping("/{id}")
+	public ResponseEntity<RegistrationDTO> register(Authentication authentication,
+			@RequestBody RegistrationDTO registration, @PathVariable("id") Integer id) {
+
+		AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
+		UUID userId = UUID.fromString(details.getUsername());
+
+		RegistrationDTO ret = new RegistrationDTO();
+		ret.setEventid(id);
+		ret.setUserid(userId);
+
+		try {
+			es.saveRegistration(registration);
+		} catch (DuplicateException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(ret);
+		} catch (InvalidException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ret);
+		}
+
+		return ResponseEntity.ok().body(ret);
+	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<List<RegistrationDTO>> getRegistrations(Authentication authentication,
+			@PathVariable("id") Integer id) {
+
+		List<RegistrationDTO> ret = new ArrayList<RegistrationDTO>();
+
+		try {
+			ret = es.getRegistrations(id);
+		} catch (InvalidException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ret);
+		}
+
+		return ResponseEntity.ok().body(ret);
 	}
 }

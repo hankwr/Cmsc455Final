@@ -1,6 +1,7 @@
 package edu.lawrence.friendfinder.services;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import edu.lawrence.friendfinder.exceptions.DuplicateException;
 import edu.lawrence.friendfinder.exceptions.InvalidException;
 import edu.lawrence.friendfinder.interfaces.dtos.EventDTO;
 import edu.lawrence.friendfinder.interfaces.dtos.RegistrationDTO;
+import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
 import edu.lawrence.friendfinder.repositories.EventRepository;
 import edu.lawrence.friendfinder.repositories.RegistrationRepository;
 import edu.lawrence.friendfinder.repositories.UserRepository;
@@ -85,4 +87,25 @@ public class EventService{
         // Log Registration
         registrationRepository.save(newReg);
     }
+    
+	public List<RegistrationDTO> getRegistrations(Integer id) throws InvalidException {
+		Optional<Event> maybeEvent = eventRepository.findById(id);
+		if (!maybeEvent.isPresent())
+			throw new InvalidException();
+
+		List<RegistrationDTO> ret = new ArrayList<RegistrationDTO>();
+
+		maybeEvent.get().getRegistrations().forEach((r) -> {
+			ret.add(new RegistrationDTO(r));
+		});
+
+		if (ret.size() == 0) {
+			RegistrationDTO r = new RegistrationDTO();
+			r.setEventid(-1);
+			r.setUserid(null);
+			ret.add(r);
+		}
+
+		return ret;
+	}
 }
