@@ -114,8 +114,7 @@ public class EventTests {
 		header("Authorization", "Bearer " + tokenA).
 		when().post("/events/" + eventId).
 		then().
-		statusCode(anyOf(is(HttpStatus.OK.value()), 
-				is(HttpStatus.BAD_REQUEST.value()), 
+		statusCode(anyOf(is(HttpStatus.OK.value()),  
 				is(HttpStatus.CONFLICT.value())));
 		
 	}
@@ -127,7 +126,6 @@ public class EventTests {
 		header("Authorization", "Bearer " + tokenA).
 		when().get("/events/" + eventId + "/registrations").
 		then().
-		statusCode(anyOf(is(HttpStatus.OK.value()),
-				is(HttpStatus.BAD_REQUEST.value())));
+		statusCode(HttpStatus.OK.value());
 	}
 }
