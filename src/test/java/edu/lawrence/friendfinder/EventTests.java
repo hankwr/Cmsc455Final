@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test;
 // Rest-level includes [Test Helpers]
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
 
 // Spring-level includes [Class Annotations]
 import org.springframework.boot.test.context.SpringBootTest;
