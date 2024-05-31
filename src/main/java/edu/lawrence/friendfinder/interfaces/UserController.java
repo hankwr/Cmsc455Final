@@ -114,27 +114,27 @@ public class UserController {
     // 		clutter the searchbar
     // http://.../$platform=tag1&platform=tag2&genre=tag3&genre=tag4&excl=false
     // http://.../$excl=false
-    @GetMapping(value = "/profile", params = {"platform", "genre", "excl"})
-    public ResponseEntity<List<ProfileDTO>> getProfileWithTags(Authentication authentication, 
-    		@RequestParam(value = "platform", required = false) List<String> platformTags,
-    		@RequestParam(value = "genre", required = false) List<String> genreTags,
-    		@RequestParam(value = "excl") boolean exclude)
-    {
-    	AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
-    	
-    	List<ProfileDTO> results = new ArrayList<ProfileDTO>();
-    	
-    	// Prevented non-users from accessing other user profiles
-    	UUID id = UUID.fromString(details.getUsername());
-    	Profile checkUser = us.findProfile(id);
-    	if (checkUser == null)
-    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(results);
-    	
-    	if (exclude)
-    		results = us.getProfilesByTagsEx(platformTags, genreTags);
-    	else
-    		results = us.getProfilesByTags(platformTags, genreTags);
-    	
-    	return ResponseEntity.ok().body(results);
-    }
+//    @GetMapping(value = "/profile", params = {"platform", "genre", "excl"})
+//    public ResponseEntity<List<ProfileDTO>> getProfileWithTags(Authentication authentication, 
+//    		@RequestParam(value = "platform", required = false) List<String> platformTags,
+//    		@RequestParam(value = "genre", required = false) List<String> genreTags,
+//    		@RequestParam(value = "excl") boolean exclude)
+//    {
+//    	AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
+//    	
+//    	List<ProfileDTO> results = new ArrayList<ProfileDTO>();
+//    	
+//    	// Prevented non-users from accessing other user profiles
+//    	UUID id = UUID.fromString(details.getUsername());
+//    	Profile checkUser = us.findProfile(id);
+//    	if (checkUser == null)
+//    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(results);
+//    	
+//    	if (exclude)
+//    		results = us.getProfilesByTagsEx(platformTags, genreTags);
+//    	else
+//    		results = us.getProfilesByTags(platformTags, genreTags);
+//    	
+//    	return ResponseEntity.ok().body(results);
+//    }
 }
