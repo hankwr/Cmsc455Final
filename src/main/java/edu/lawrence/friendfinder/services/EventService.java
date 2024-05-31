@@ -59,8 +59,12 @@ public class EventService{
 		return newE.getId().toString();
 	}
 
-    public Event findById(Integer id) {
-		return eventRepository.findById(id).get();
+    public Event findById(Integer id) throws InvalidException {
+    	Optional<Event> maybeEvent = eventRepository.findById(id);
+    	if(!maybeEvent.isPresent())
+    		throw new InvalidException();
+    	
+		return maybeEvent.get();
 	}
 
     public List<Event> findFuture() {
@@ -70,7 +74,7 @@ public class EventService{
     public void saveRegistration(RegistrationDTO reg) throws DuplicateException, InvalidException {
         // Check if event exists
         Optional<Event> maybeEvent = eventRepository.findById(reg.getEventid());
-        if(maybeEvent.isPresent())
+        if(!maybeEvent.isPresent())
 			throw new InvalidException();
         Event event = maybeEvent.get();
 

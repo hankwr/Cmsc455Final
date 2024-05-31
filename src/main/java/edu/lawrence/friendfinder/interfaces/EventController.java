@@ -53,9 +53,16 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(event);
     }
 
-    @GetMapping("/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<EventDTO> findById(@PathVariable Integer id) {
-		Event event = es.findById(id);
+
+		Event event;
+		try {
+			event = es.findById(id);
+		} catch (InvalidException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+
 		EventDTO result = new EventDTO(event);
 		return ResponseEntity.ok().body(result);
 	}
