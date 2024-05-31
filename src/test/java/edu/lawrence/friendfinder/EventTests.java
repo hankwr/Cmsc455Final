@@ -120,4 +120,15 @@ public class EventTests {
 				is(HttpStatus.CONFLICT.value())));
 		
 	}
+	
+	@Test
+	@Order(6)
+	public void testGetRegistrations() {
+		given().
+		header("Authorization", "Bearer " + tokenA).
+		when().get("/events/" + eventId + "/registrations").
+		then().
+		statusCode(anyOf(is(HttpStatus.OK.value()),
+				is(HttpStatus.BAD_REQUEST.value())));
+	}
 }
