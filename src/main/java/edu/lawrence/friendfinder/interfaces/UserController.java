@@ -78,6 +78,8 @@ public class UserController {
     	UUID id = UUID.fromString(details.getUsername());
     	ProfileDTO ret = profile;
     	
+    	System.out.println(profile);
+    	
     	try {
     		ret = us.saveProfile(id,profile);
     	} catch(UnauthorizedException ex) {
