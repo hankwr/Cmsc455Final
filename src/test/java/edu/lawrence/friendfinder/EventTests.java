@@ -100,13 +100,12 @@ public class EventTests {
 	@Test
 	@Order(4)
 	public void testGetEvents() {
-		eventId =  
-				when()
-				.get("/events")
+		eventId =  given()
+				.header("Authorization", "Bearer " + tokenA)
+				.when().get("/events")
 				.then()
 				.statusCode(200)
-				.extract()
-				.path("[0].name");
+				.extract().path("[0].name");
 		
 		System.out.println(eventId);
 	}
