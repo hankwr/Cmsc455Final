@@ -137,10 +137,7 @@ public class UserController {
     		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     	
     	List<ProfileDTO> ret;
-    	
-    	System.out.println(query.getGenres());
-    	System.out.println(query.getGenres().size());
-    	
+    
     	if (exclusive)
     		ret = us.findByTagsEX(query);
     	else
