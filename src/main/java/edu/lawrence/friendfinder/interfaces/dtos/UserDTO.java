@@ -11,7 +11,7 @@ public class UserDTO{
 		password = "";
 		token = "";
 	}
-
+	
 	public String getUsername() {
 		return username;
 	}
