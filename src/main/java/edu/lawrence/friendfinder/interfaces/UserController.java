@@ -75,14 +75,16 @@ public class UserController {
     public ResponseEntity<ProfileDTO> saveProfile(Authentication authentication,@RequestBody ProfileDTO profile) {
     	AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
     	UUID id = UUID.fromString(details.getUsername());
+    	ProfileDTO ret = profile;
+    	
     	try {
-    		us.saveProfile(id,profile);
+    		ret = us.saveProfile(id,profile);
     	} catch(UnauthorizedException ex) {
-    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(profile);
+    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ret);
     	} catch(DuplicateException ex) {
-    		return ResponseEntity.status(HttpStatus.CONFLICT).body(profile);
+    		return ResponseEntity.status(HttpStatus.CONFLICT).body(ret);
     	}
-    	return ResponseEntity.status(HttpStatus.CREATED).body(profile);
+    	return ResponseEntity.status(HttpStatus.CREATED).body(ret);
     }
     
     @GetMapping("/profile")

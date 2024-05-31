@@ -9,12 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.lawrence.friendfinder.entities.Event;
+import edu.lawrence.friendfinder.entities.GenreTag;
+import edu.lawrence.friendfinder.entities.PlatformTag;
 import edu.lawrence.friendfinder.entities.Profile;
 import edu.lawrence.friendfinder.entities.User;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
 import edu.lawrence.friendfinder.exceptions.UnauthorizedException;
 import edu.lawrence.friendfinder.interfaces.dtos.ProfileDTO;
 import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
+import edu.lawrence.friendfinder.repositories.GenreTagRepository;
+import edu.lawrence.friendfinder.repositories.PlatformTagRepository;
 import edu.lawrence.friendfinder.repositories.ProfileRepository;
 import edu.lawrence.friendfinder.repositories.UserRepository;
 
@@ -29,6 +33,12 @@ public class UserService {
     @Autowired
     ProfileRepository profileRepository;
 	
+    @Autowired
+    PlatformTagRepository platformTagRepository;
+    
+    @Autowired
+    GenreTagRepository genreTagRepository;
+    
     // Register new user
 	public String save(UserDTO user) throws DuplicateException {
 		List<User> existing = userRepository.findByUsername(user.getUsername());
@@ -60,7 +70,7 @@ public class UserService {
         return u;
 	}
 	
-	public void saveProfile(UUID userid,ProfileDTO profile) throws UnauthorizedException, DuplicateException {
+	public ProfileDTO saveProfile(UUID userid,ProfileDTO profile) throws UnauthorizedException, DuplicateException {
 		Optional<User> maybeUser = userRepository.findById(userid);
 		/*if(!maybeUser.isPresent())
 			throw new UnauthorizedException();
@@ -71,7 +81,29 @@ public class UserService {
 		
 		Profile newProfile = new Profile(profile);
 		newProfile.setUser(user);
+		
 		profileRepository.save(newProfile);
+
+		profile.getGenres().forEach((t)-> {
+			
+			GenreTag gt = new GenreTag();
+			gt.setName(t);
+			gt.setProfile(newProfile);
+			
+			genreTagRepository.save(gt);
+		});
+		
+		profile.getPlatforms().forEach((t)-> {
+			
+			PlatformTag pt = new PlatformTag();
+			pt.setName(t);
+			pt.setProfile(newProfile);
+			
+			platformTagRepository.save(pt);
+		});
+		
+		profile.setUser(user.getId().toString());
+		return profile;
 	}
 	
 	public Profile findProfile(UUID userid) {

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.lawrence.friendfinder.entities.Event;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
+import edu.lawrence.friendfinder.exceptions.InvalidException;
 import edu.lawrence.friendfinder.interfaces.dtos.EventDTO;
 import edu.lawrence.friendfinder.security.AppUserDetails;
 import edu.lawrence.friendfinder.services.EventService;
@@ -44,7 +45,9 @@ public class EventController {
         	es.save(event);
         } catch(DuplicateException ex){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(event);
-        } 
+        } catch(InvalidException ex) {
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(event);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(event);
     }
 

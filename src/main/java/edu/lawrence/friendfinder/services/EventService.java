@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import edu.lawrence.friendfinder.entities.Event;
 import edu.lawrence.friendfinder.entities.Registration;
+import edu.lawrence.friendfinder.entities.User;
 import edu.lawrence.friendfinder.exceptions.DuplicateException;
 import edu.lawrence.friendfinder.exceptions.InvalidException;
 import edu.lawrence.friendfinder.interfaces.dtos.EventDTO;
@@ -33,13 +34,18 @@ public class EventService{
     UserRepository userRepository;
 	
     // Register new event
-	public String save(EventDTO e) throws DuplicateException {
+	public String save(EventDTO e) throws DuplicateException, InvalidException {
         
 		// I removed duplicate checking for now b/c I'm not sure how we could do that effectively
         // There are so many parameters that would constitute a different event if changed, and
         // there is not one variable that is unique to each event
 
+		Optional<User> maybeUser = userRepository.findById(e.getUserid());
+		if (!maybeUser.isPresent())
+			throw new InvalidException();
+		
 		Event newE = new Event();
+		newE.setHost(maybeUser.get());
 		newE.setName(e.getName());
         newE.setDescription(e.getDescription());
         newE.setLocation(e.getLocation());
