@@ -120,4 +120,67 @@ public class UserService {
 			return new ArrayList<Event>();
 		return maybeUser.get().getEvents();
 	}
+	
+	public List<ProfileDTO> findByTags(ProfileDTO query) {
+		List<Profile> profiles = profileRepository.findAll();
+		List<ProfileDTO> ret = new ArrayList<ProfileDTO>();
+
+		List<String> platTags = query.getPlatforms();
+		List<String> genreTags = query.getGenres();
+		
+		for (Profile p : profiles) {
+			boolean add = platTags.size() == 0 && genreTags.size() == 0;
+			
+			for (PlatformTag t : p.getPlatforms())
+				add = platTags.contains(t.getName()) || add;
+			
+			
+			for (GenreTag t : p.getGenres())
+				add = genreTags.contains(t.getName()) || add;
+
+			for (ProfileDTO d : ret)
+				add = !d.getUser().equals(p.getUser().getId().toString()) && add;
+
+			if (add)
+				ret.add(new ProfileDTO(p));
+		}
+
+		if (ret.size() == 0)
+			ret.add(query);
+
+		return ret;
+	}
+	
+	public List<ProfileDTO> findByTagsEX(ProfileDTO query) {
+		List<Profile> profiles = profileRepository.findAll();
+		List<ProfileDTO> ret = new ArrayList<ProfileDTO>();
+
+		List<String> platTags = query.getPlatforms();
+		List<String> genreTags = query.getGenres();
+		
+		for (Profile p : profiles) {
+			boolean add = true;
+			
+			if (platTags.size() > 0) {
+				for (PlatformTag t : p.getPlatforms())
+					add = platTags.contains(t.getName()) && add;
+			}
+			
+			if (genreTags.size() > 0) {
+				for (GenreTag t : p.getGenres())
+					add = genreTags.contains(t.getName()) && add;
+			}
+			
+			for (ProfileDTO d : ret)
+				add = !d.getUser().equals(p.getUser().getId().toString()) && add;
+
+			if (add)
+				ret.add(new ProfileDTO(p));
+		}
+
+		if (ret.size() == 0)
+			ret.add(query);
+
+		return ret;
+	}
 }

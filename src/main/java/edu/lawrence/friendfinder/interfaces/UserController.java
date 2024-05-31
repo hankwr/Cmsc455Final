@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.lawrence.friendfinder.entities.Event;
@@ -110,4 +111,41 @@ public class UserController {
 		}
 		return ResponseEntity.ok().body(results);
 	}
+    
+    public class SearchQuery {
+    	public List<String> platTags = new ArrayList<String>();
+    	public List<String> genreTags = new ArrayList<String>();;
+    	public boolean exclusive = false;
+    }
+    
+    /**
+     * url takes the form of "url.../users/profiles?ex=" followed by "true" or "false"
+     * Request body is an otherwise empty ProfileDTO with queried tags in it's body
+     * ex path variable controls whether search is exclusive
+     * exclusive search requires ALL tags in a prospective Profile to match with the query
+     * in exclusive requires at least one match
+     * If no matches are found, returns a list with just the querying DTO included
+     * If tag list in querying DTO is empty, returns all profiles (regardless of ex) 
+     **/
+    @GetMapping(value = "/profiles", params = "ex")
+    public ResponseEntity<List<ProfileDTO>> getProfilesWithTags(Authentication authentication,
+    		@RequestBody ProfileDTO query, @RequestParam(name = "ex") boolean exclusive) {
+    	AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
+    	UUID id = UUID.fromString(details.getUsername());
+    	
+    	if (us.findProfile(id) == null)
+    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    	
+    	List<ProfileDTO> ret;
+    	
+    	System.out.println(query.getGenres());
+    	System.out.println(query.getGenres().size());
+    	
+    	if (exclusive)
+    		ret = us.findByTagsEX(query);
+    	else
+    		ret = us.findByTags(query);
+    	
+    	return ResponseEntity.ok().body(ret);
+    }
 }
