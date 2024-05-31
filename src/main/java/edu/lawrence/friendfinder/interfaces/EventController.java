@@ -92,7 +92,7 @@ public class EventController {
 		return ResponseEntity.ok().body(ret);
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/{id}/registrations")
 	public ResponseEntity<List<RegistrationDTO>> getRegistrations(Authentication authentication,
 			@PathVariable("id") Integer id) {
 
