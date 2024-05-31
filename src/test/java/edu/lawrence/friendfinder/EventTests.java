@@ -2,7 +2,6 @@ package edu.lawrence.friendfinder;
 
 // In-project includes [DTOs]
 import edu.lawrence.friendfinder.interfaces.dtos.EventDTO;
-import edu.lawrence.friendfinder.interfaces.dtos.ProfileDTO;
 import edu.lawrence.friendfinder.interfaces.dtos.UserDTO;
 
 // Hamcrest-level includes [Test Helpers]
@@ -21,6 +20,7 @@ import org.junit.jupiter.api.Test;
 // Rest-level includes [Test Helpers]
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.when;
 
 // Spring-level includes [Class Annotations]
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,6 +36,7 @@ public class EventTests {
 	private static UserDTO userA;
 	private static String tokenA;
 	private static EventDTO eventA;
+	private static String eventId;
 	
 	@BeforeAll
 	public static void setup() {
@@ -50,25 +51,21 @@ public class EventTests {
 		eventA.setName("test event");
 		eventA.setDescription("This is a test event");
 		eventA.setLocation("800 E Boldt Way");
-		eventA.setTimeZone("UTC");
-		eventA.setStartTime("2024-06-15T15:00:00Z");
-		eventA.setEndTime("2024-06-15T18:00:00Z");
+		eventA.setStartTime("12:00 PM, 06/30/2024 UTC");
+		eventA.setEndTime("3:00 PM, 06/30/2024 UTC");
 	}
 	
 	@Test
 	@Order(1)
-	public void testPostUser() {
+	public void prerequisites() {
+		// Post user event and get authentication token
 		given()
 		.contentType("application/json")
 		.body(userA)
 		.when().post("/users")
 		.then()
 		.statusCode(anyOf(is(HttpStatus.CREATED.value()), is(HttpStatus.CONFLICT.value())));
-	}
-	
-	@Test
-	@Order(2)
-	public void getUserToken() {
+
 		tokenA = given()
 				.contentType("application/json")
 				.body(userA)
@@ -79,7 +76,7 @@ public class EventTests {
 	}
 
 	@Test
-	@Order(3)
+	@Order(2)
 	public void testPostEvent() {
 		given()
 		.header("Authorization","Bearer "+tokenA)
@@ -91,12 +88,26 @@ public class EventTests {
 	}
 
 	@Test
-	@Order(4)
+	@Order(3)
 	public void testGetUserEvents() {
 		given()
 		.header("Authorization", "Bearer " + tokenA)
 		.when().get("/users/events")
 		.then()
 		.statusCode(HttpStatus.OK.value());
+	}
+
+	@Test
+	@Order(4)
+	public void testGetEvents() {
+		eventId =  
+				when()
+				.get("/events")
+				.then()
+				.statusCode(200)
+				.extract()
+				.path("[0].name");
+		
+		System.out.println(eventId);
 	}
 }
