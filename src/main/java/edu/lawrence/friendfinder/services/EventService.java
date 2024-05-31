@@ -20,9 +20,6 @@ import edu.lawrence.friendfinder.repositories.EventRepository;
 import edu.lawrence.friendfinder.repositories.RegistrationRepository;
 import edu.lawrence.friendfinder.repositories.UserRepository;
 
-
-// Spring-level includes [Field Annotations]
-
 @Service
 public class EventService{
 	@Autowired
