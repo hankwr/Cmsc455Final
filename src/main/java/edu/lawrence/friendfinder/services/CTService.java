@@ -24,7 +24,7 @@ public class CTService {
 	 * leading zeros in front of hour will be removed automatically
 	 */
 	private static final String regexPattern = "^\\d{1,2}:\\d{2} [A-Z]{2}, \\d{1,2}/\\d{2}/\\d{4} [A-Z]{1,3}$";
-	private static final String pattern = "hh:mm a, MM/dd/uuuu z";
+	private static final String pattern = "h:mm a, M/dd/uuuu z";
 	 private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 	
 	/**
