@@ -81,10 +81,11 @@ public class EventService{
 
         // Check for duplicates in Registration table
         Optional<Registration> maybeRegistration = registrationRepository.checkForDuplicates(newReg.getEvent().getId(), newReg.getUser().getId());
-		if(!maybeRegistration.isPresent())
+		if(maybeRegistration.isPresent())
 			throw new DuplicateException();
 
         // Log Registration
+		System.out.println("Testing");
         registrationRepository.save(newReg);
     }
     
