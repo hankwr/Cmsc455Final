@@ -98,10 +98,10 @@ public class EventTests {
 
 	@Test
 	@Order(4)
-	public void testGetEvents() {
+	public void testGetFutureEvents() {
 		eventId =  given()
 				.header("Authorization", "Bearer " + tokenA)
-				.when().get("/users/events")
+				.when().get("/events")
 				.then()
 				.statusCode(200)
 				.extract().path("[0].eventId").toString();
@@ -109,7 +109,7 @@ public class EventTests {
 	
 	@Test
 	@Order(5)
-	public void testRegistration() {
+	public void testPostRegistration() {
 		given().
 		header("Authorization", "Bearer " + tokenA).
 		when().post("/events/" + eventId).
