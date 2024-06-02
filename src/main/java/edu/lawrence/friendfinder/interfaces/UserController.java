@@ -128,15 +128,9 @@ public class UserController {
      * If tag list in querying DTO is empty, returns all profiles (regardless of ex) 
      **/
     @GetMapping(value = "/profiles", params = "ex")
-    public ResponseEntity<List<ProfileDTO>> getProfilesWithTags(Authentication authentication,
+    public ResponseEntity<List<ProfileDTO>> getProfilesWithTags(
     		@RequestBody ProfileDTO query, @RequestParam(name = "ex") boolean exclusive) {
-    	AppUserDetails details = (AppUserDetails) authentication.getPrincipal();
-    	UUID id = UUID.fromString(details.getUsername());
-    	
-    	if (us.findProfile(id) == null)
-    		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-    	
-    	List<ProfileDTO> ret;
+        List<ProfileDTO> ret;
     
     	if (exclusive)
     		ret = us.findByTagsEX(query);
