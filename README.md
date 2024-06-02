@@ -63,9 +63,9 @@ for a little demo
 
 ##  3. <a name='RunningtheIncludedTests'></a>Running the Included Tests
 
-All tests for this project are **end-to-end** tests contained within the *UserRegistrationTests.java* file. To run them, depending on your IDE, you should be able to right click on the file and click on an option similar to "Run Tests".
+All tests for this project are **end-to-end** tests contained within the *src>>test>>java>>edu>>lawrence>>friendfinder* folder. To run them, depending on your IDE, you should be able to right click on the file and click on an option similar to "Run Tests".
 
-Note that running these tests only works if you have the backend opened yourself as a developer. There is no way to run them by interacting with the server through HTTP
+Note that running these tests only works if you have the backend opened yourself as a developer. There is no way to run them by interacting with the server through HTTP.
 
 ##  4. <a name='Deployment'></a>Deployment
 
