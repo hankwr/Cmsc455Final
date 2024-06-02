@@ -137,7 +137,7 @@ The genres and platforms lists will be turned into the tag objects on the backen
 
 ###  4.2. <a name='URLEndpoints'></a>URL Endpoints
 
-As a rule of thumb, GET requests will return a DTO of the object you're requesting, and POST requests will return a DTO copy of the object you posted to the server.
+As a rule of thumb, GET requests will return a DTO of the object you're requesting, and POST requests will return a DTO copy of the object you posted to the server. Also, for many of the POST requests, the user field will automatically be assigned to the user submitting the request based off of the authentication header.
 
 ####  4.2.1. <a name='Authentication'></a>Authentication
 Most of the HTTP Requests (except registering and logging in) require authentication. This means that to be granted access to the resource the user is requesting, they must send their authentication token within the HTTP header. This takes the form:
@@ -170,7 +170,7 @@ Request body should include a [ProfileDTO](#ProfileDTO). The profile is linked t
 
     [baseurl]/events
 
-Request body should include an [EventDTO](#EventDTO). The *userid* field corresponds to the host of the event, which is the person posting the event to the server.
+Request body should include an [EventDTO](#EventDTO). The user posting this event to the server is assigned to the role of the *host the event*.
 
 ##### Post a Registration
 
