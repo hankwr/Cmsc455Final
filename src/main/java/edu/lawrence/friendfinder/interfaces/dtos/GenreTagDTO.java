@@ -9,10 +9,7 @@ public class GenreTagDTO {
 	
 	private String name;
 	
-	public GenreTagDTO() {
-		profile = 0;
-		name = "";
-	}
+	public GenreTagDTO() {}
 	
 	public GenreTagDTO(GenreTag core) {
 		this();

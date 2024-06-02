@@ -9,10 +9,7 @@ public class PlatformTagDTO {
 	
 	private String name;
 
-	public PlatformTagDTO() {
-		profile = 0;
-		name = "";
-	}
+	public PlatformTagDTO() {}
 	
 	public PlatformTagDTO(PlatformTag core) {
 		this();

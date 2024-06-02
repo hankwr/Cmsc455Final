@@ -38,10 +38,8 @@ public class EventDTO {
 		description = "";
 		location = "";
 		timeZone = "UTC";
-		
 		startTime = "12:00 AM, 1/01/1970 UTC"; // Instant.EPOCH as raw formatted string
 		endTime = "12:00 AM, 1/01/1970 UTC";
-		
 		numRegistered = 0;
 	}
 	

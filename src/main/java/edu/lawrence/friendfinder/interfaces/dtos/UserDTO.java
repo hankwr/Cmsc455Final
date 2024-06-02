@@ -7,8 +7,6 @@ public class UserDTO{
 	private String token;
 	
 	public UserDTO() {
-		username = "";
-		password = "";
 		token = "";
 	}
 	
