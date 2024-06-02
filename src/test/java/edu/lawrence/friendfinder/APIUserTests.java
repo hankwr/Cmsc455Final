@@ -35,8 +35,13 @@ import org.springframework.test.context.ActiveProfiles;
 public class APIUserTests {
 	
 	private static UserDTO userA;
+	private static UserDTO userB;
 	private static String tokenA;
+	private static String tokenB;
 	private static ProfileDTO profileA;
+	private static ProfileDTO profileB;
+	private static ProfileDTO searchProfile;
+	private static String profileId;
 	
 	@BeforeAll
 	public static void setup() {
@@ -46,15 +51,29 @@ public class APIUserTests {
 		userA = new UserDTO();
 		userA.setUsername("UserA");
 		userA.setPassword("password");
+		userB = new UserDTO();
+		userB.setUsername("UserB");
+		userB.setPassword("testing");
 
 		profileA = new ProfileDTO();
 		profileA.setFullname("Test User");
-		profileA.setEmailaddress("user@test.com");
+		profileA.setEmailaddress("userA@test.com");
 		profileA.setCountrycode(1);
 		profileA.setPhonenumber("4444444444");
 		profileA.setBio("I am a test user");
 		profileA.setGenres(List.of("Test Genre 1", "Test Genre 2"));
 		profileA.setPlatforms(List.of("Test Platform 1", "Test Platform 2"));
+		profileB = new ProfileDTO();
+		profileB.setFullname("Mr. Tester");
+		profileB.setEmailaddress("userB@test.com");
+		profileB.setCountrycode(1);
+		profileB.setPhonenumber("5555555555");
+		profileB.setBio("This is a second test user");
+		profileB.setGenres(List.of("Test Genre 2", "Test Genre 3"));
+		profileB.setPlatforms(List.of("Test Platform 2", "Test Platform 3"));
+		searchProfile = new ProfileDTO();
+		searchProfile.setGenres(List.of("Test Genre 2", "Test Genre 3"));
+		searchProfile.setPlatforms(List.of("Test Platform 2", "Test Platform 3"));
 	}
 	
 	@Test
@@ -209,5 +228,45 @@ public class APIUserTests {
 		.when().get("/users/profile")
 		.then()
 		.statusCode(HttpStatus.OK.value());
+	}
+
+	@Test
+	@Order(11)
+	public void setupSecondUser() {
+		given()
+		.contentType("application/json")
+		.body(userB)
+		.when().post("/users")
+		.then()
+		.statusCode(anyOf(is(HttpStatus.CREATED.value()), is(HttpStatus.CONFLICT.value())));
+
+		tokenB = given()
+				.contentType("application/json")
+				.body(userB)
+				.when().post("/users/login")
+				.then()
+				.statusCode(200)
+				.extract().path("token");
+
+		given()
+		.header("Authorization","Bearer "+tokenB)
+		.contentType("application/json")
+		.body(profileB)
+		.when().post("/users/profile")
+		.then()
+		.statusCode(anyOf(is(201), is(401), is(409)));
+	}
+
+	@Test
+	@Order(12)
+	public void testGetProfilesQuery() {
+		// Getting a 403 HTTP error for some reason even with authentication removed
+		profileId =  given()
+				.body(searchProfile)
+				.when().get("/users/profiles?ex=true")
+				.then()
+				.statusCode(200)
+				.extract().path("[0].emailaddress").toString();
+		System.out.println(profileId);
 	}
 }
