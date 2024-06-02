@@ -17,7 +17,9 @@ public class ProfileDTO{
 	private List<String> genres;
 	private List<String> platforms;
 	
-	public ProfileDTO() {}
+	public ProfileDTO() {
+		countrycode = 1;
+	}
 
 	public ProfileDTO(Profile core) {
 		user = core.getUser().getId().toString();
