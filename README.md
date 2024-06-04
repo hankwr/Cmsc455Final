@@ -202,16 +202,15 @@ The {id} field should be replaced with the id-value of the event being requesed.
 
   - [Creative Commons](https://creativecommons.org/) - Used to choose
     the license
-  - [MySQL](https://www.mysql.com/) - Used to create and manage
-    the database
-  - [Spring Security](https://spring.io/projects/spring-security) - Used for user
+  - [Spring Security](https://spring.io/projects/spring-security) - User
     authentication
-  - [Spring Data](https://spring.io/projects/spring-data) - Used for data repository
-    creation
+  - [Spring Data](https://spring.io/projects/spring-data) - Data repository
+    creation and management
   - [Hibernate](https://hibernate.org/) - Used for interacting with
     the database
-  - [Spring Boot](https://spring.io/projects/spring-boot) - Used for construction of
+  - [Spring Boot](https://spring.io/projects/spring-boot) - Construction of
     server application and REST controllers
+  - [REST-Assured](https://rest-assured.io/) - End-to-end controller testing
 
 ##  6. <a name='Versioning'></a>Versioning
 
